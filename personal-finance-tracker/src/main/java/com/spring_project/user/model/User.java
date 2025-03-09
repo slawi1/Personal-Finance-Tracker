@@ -36,6 +36,12 @@ public class User {
 
     private String profilePicture;
 
+    private Boolean activeProfile;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<RecurringPayment> recurringPayment;
 
@@ -48,9 +54,6 @@ public class User {
     @OneToMany(mappedBy = "userCategories", fetch = FetchType.EAGER)
     private List<Category> categories;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
 
 
 
