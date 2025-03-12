@@ -4,10 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home</title>
-    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
 
 </head>
 <body>
+<header>
+    Personal Finance Tracker
+</header>
+
+<main>
+
+    <div class="home-page">
+        <div class="nav-bar">
+            <nav class="navigation">
+
+                <a href="/home">
+                    <p>Add saving goal</p>
+                </a>
+                <a href="/home">
+                    <p>Edit profile</p>
+                </a>
+                <a href="/home">
+                    <p>Settings</p>
+                </a>
+                <a href="/">
+                    <p>Logout</p>
+                </a>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="categories-container">
+                <div class="category-div">
+                    <h4>Category 1</h4>
+                    <p>95,30 EUR</p>
+                    <img src="">
+                </div>
+                <div class="category-div">
+                    <h4>Category 2</h4>
+                    <p>14,34 EUR</p>
+                    <img src="">
+                </div>
+                <div class="category-div">
+                    <h4>Category 3</h4>
+                    <p>245,30 EUR</p>
+                    <img src="">
+                </div>
+                <div class="category-div">
+                    <h4>Category 4</h4>
+                    <p>9,30 EUR</p>
+                    <img src="">
+                </div>
+            </div>
+            <div class="tables">
+                <div class="last-transaction-table">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Sum</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Name 1</td>
+                            <td>Category 1</td>
+                            <td>50,30 EUR</td>
+                            <td>12.03.2025</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="add-expense-form">
+                   <form class="add-expense">
+                       <h4>Add expense</h4>
+                       <div class="input-element">
+                           <label for="expense name">Expense name: </label>
+                           <input type="text" id="expense name">
+                       </div>
+                       <div class="input-element">
+                           <label for="sum">Sum: </label>
+                           <input type="number" id="sum">
+                       </div>
+                       <div class="input-element">
+                           <label for="date">Date: </label>
+                           <input type="date" id="date">
+                       </div>
+                       <div>
+                           <label for="category1">Category 1</label>
+                           <input type="radio" id="category1">
+                           <label for="category2">Category 2</label>
+                           <input type="radio" id="category2">
+                           <label for="category3">Category 3</label>
+                           <input type="radio" id="category3">
+                           <label for="category6">Category 6</label>
+                           <input type="radio" id="category6">
+                           <label for="category7">Category 7</label>
+                           <input type="radio" id="category7">
+                           <label for="category8">Category 8</label>
+                           <input type="radio" id="category8">
+                       </div>
+                       <div>
+                           <label for="category4">Category 4</label>
+                           <input type="radio" id="category4">
+                       </div>
+                       <div>
+                           <label for="category5">Category 5</label>
+                           <input type="radio" id="category5">
+                       </div>
+
+                       <button type="submit">Add</button>
+                   </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
 
 </body>
 </html>

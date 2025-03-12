@@ -43,10 +43,7 @@ public class UserService implements UserDetailsService {
         if (optionalUser.isPresent()) {
             throw new UsernameAlreadyExistException("Username '%s' already in use".formatted(registerRequest.getUsername()));
         }
-//        Optional<User> optional = userRepository.findByEmail((registerRequest.getEmail()));
-//        if (optional.isPresent()) {
-//            throw new DomainException("Email '%s' is already taken".formatted(registerRequest.getEmail()));
-//        }
+
         User user = userRepository.save(createUser(registerRequest));
 
         log.info("User with id '%s' created successfully.".formatted(user.getId()));
@@ -57,7 +54,6 @@ public class UserService implements UserDetailsService {
         return User.builder()
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .email(registerRequest.getEmail())
                 .activeProfile(true)
                 .role(Role.USER)
                 .build();
