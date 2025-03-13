@@ -1,5 +1,6 @@
 package com.spring_project.user.service;
 
+import com.spring_project.category.service.CategoryService;
 import com.spring_project.exception.DomainException;
 import com.spring_project.exception.UsernameAlreadyExistException;
 import com.spring_project.security.AuthenticationData;
@@ -7,6 +8,7 @@ import com.spring_project.user.model.Role;
 import com.spring_project.user.model.User;
 import com.spring_project.user.repository.UserRepository;
 import com.spring_project.web.dto.RegisterRequest;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,10 +25,13 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CategoryService categoryService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CategoryService categoryService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -37,14 +42,18 @@ public class UserService implements UserDetailsService {
      return new AuthenticationData(user.getId(),username,user.getPassword(),user.getRole(), user.getActiveProfile());
     }
 
+    @Transactional
     public void register(RegisterRequest registerRequest) {
 
         Optional<User> optionalUser = userRepository.findByUsername((registerRequest.getUsername()));
         if (optionalUser.isPresent()) {
-            throw new UsernameAlreadyExistException("Username '%s' already in use".formatted(registerRequest.getUsername()));
+            throw new UsernameAlreadyExistException("Username '%s' is already taken".formatted(registerRequest.getUsername()));
         }
 
         User user = userRepository.save(createUser(registerRequest));
+
+        categoryService.addDefaultCategories(user);
+
 
         log.info("User with id '%s' created successfully.".formatted(user.getId()));
     }
@@ -61,5 +70,9 @@ public class UserService implements UserDetailsService {
 
     public User getById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new DomainException("User not found"));
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new DomainException("User not found"));
     }
 }

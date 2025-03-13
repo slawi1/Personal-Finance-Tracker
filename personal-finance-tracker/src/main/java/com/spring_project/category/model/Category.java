@@ -28,5 +28,11 @@ public class Category {
     @ManyToOne
     private User userCategories;
 
+    public Category(String name, User userCategories) {
+        this.name = name;
+        this.userCategories = userCategories;
+
+    }
+
 
 }

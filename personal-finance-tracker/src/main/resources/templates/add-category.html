@@ -9,12 +9,12 @@
 <body>
 
 <div class="add-category-form">
-    <form class="form">
+    <form class="form" th:action="@{/add-category}" th:method="POST" th:object="${addCategoryName}">
 
         <h3>Add new Category</h3>
 
         <label class="label-element" for="name">Category name: </label>
-        <input type="text" id="name" name="name">
+        <input type="text" id="name" name="name" th:field="*{categoryName}">
 
         <div class="add-category-button">
             <button type="submit">Add</button>
