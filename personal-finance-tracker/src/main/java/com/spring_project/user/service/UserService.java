@@ -2,6 +2,8 @@ package com.spring_project.user.service;
 
 import com.spring_project.category.service.CategoryService;
 import com.spring_project.exception.DomainException;
+import com.spring_project.exception.EmailAlreadyRegisteredException;
+import com.spring_project.exception.PasswordsDoNotMatchException;
 import com.spring_project.exception.UsernameAlreadyExistException;
 import com.spring_project.security.AuthenticationData;
 import com.spring_project.user.model.Role;
@@ -45,9 +47,13 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void register(RegisterRequest registerRequest) {
 
-        Optional<User> optionalUser = userRepository.findByUsername((registerRequest.getUsername()));
-        if (optionalUser.isPresent()) {
+        Optional<User> optionalUsername = userRepository.findByUsername((registerRequest.getUsername()));
+        if (optionalUsername.isPresent()) {
             throw new UsernameAlreadyExistException("Username '%s' is already taken".formatted(registerRequest.getUsername()));
+        }
+        Optional<User> optionalEmail = userRepository.findByEmail((registerRequest.getEmail()));
+        if (optionalEmail.isPresent()) {
+            throw new EmailAlreadyRegisteredException("Email '%s' is already registered".formatted(registerRequest.getEmail()));
         }
 
         User user = userRepository.save(createUser(registerRequest));
@@ -60,12 +66,18 @@ public class UserService implements UserDetailsService {
 
     public User createUser(RegisterRequest registerRequest) {
 
-        return User.builder()
-                .username(registerRequest.getUsername())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .activeProfile(true)
-                .role(Role.USER)
-                .build();
+        if (registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
+            return User.builder()
+                    .username(registerRequest.getUsername())
+                    .email(registerRequest.getEmail())
+                    .password(passwordEncoder.encode(registerRequest.getPassword()))
+                    .activeProfile(true)
+                    .role(Role.USER)
+                    .build();
+        }
+
+        throw new PasswordsDoNotMatchException("Passwords do not match");
+
     }
 
     public User getById(UUID id) {

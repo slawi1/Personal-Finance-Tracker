@@ -21,14 +21,19 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    private User transactionUser;
+    @Column(nullable = false)
+    private String transactionName;
+
 
     @Column(nullable = false)
     private BigDecimal amount;
 
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @ManyToOne
+    private User owner;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -37,7 +42,6 @@ public class Transaction {
     @Column(nullable = false)
     private LocalDate transactionDate;
 
-    @Column(nullable = false)
     private String description;
 
 

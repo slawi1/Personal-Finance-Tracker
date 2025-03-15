@@ -7,6 +7,7 @@ import com.spring_project.transaction.model.Transaction;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,17 +44,17 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+//    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+//    private List<RecurringPayment> recurringPayment = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "goalOwner", fetch = FetchType.EAGER)
+//    private List<SavingsGoal> goals = new ArrayList<>();
+//
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<RecurringPayment> recurringPayment;
+    private List<Transaction> transactions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "goalOwner", fetch = FetchType.EAGER)
-    private List<SavingsGoal> goals;
-
-    @OneToMany(mappedBy = "transactionUser", fetch = FetchType.EAGER)
-    private List<Transaction> transactions;
-
-    @OneToMany(mappedBy = "userCategories", fetch = FetchType.EAGER)
-    private List<Category> categories;
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<Category> categories = new ArrayList<>();
 
 
 

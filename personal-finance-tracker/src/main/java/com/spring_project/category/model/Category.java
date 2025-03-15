@@ -5,6 +5,8 @@ import com.spring_project.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,15 +24,22 @@ public class Category {
 
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    private BigDecimal amount;
+
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Transaction> transactions;
 
-    @ManyToOne
-    private User userCategories;
+//    private UUID transactionId;
 
-    public Category(String name, User userCategories) {
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id",nullable = false)
+    private User owner;
+
+    public Category(String name, User owner,BigDecimal amount) {
         this.name = name;
-        this.userCategories = userCategories;
+        this.owner = owner;
+        this.amount = amount;
 
     }
 

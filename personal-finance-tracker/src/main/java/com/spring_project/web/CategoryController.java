@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
+
 @Controller
 public class CategoryController {
 
@@ -41,7 +43,7 @@ public class CategoryController {
         }
 
         User user = userService.findByUsername(authenticationData.getUsername());
-        categoryService.addCategory(addCategoryRequest.getCategoryName(), user);
+        categoryService.addCategory(addCategoryRequest.getCategoryName(), user, BigDecimal.valueOf(0));
 
         return new ModelAndView("redirect:/home");
     }

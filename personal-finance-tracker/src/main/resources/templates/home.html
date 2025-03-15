@@ -34,26 +34,12 @@
         </div>
         <div class="main-content">
             <div class="categories-container">
-                <div class="category-div">
-                    <h4>Category 1</h4>
-                    <p>95,30 EUR</p>
-                    <img src="">
+
+                <div th:each="category : ${user.categories}">
+                    <h4 th:text="${category.name}"></h4>
+                    <p th:text="|${category.getAmount()} EUR|"></p>
                 </div>
-                <div class="category-div">
-                    <h4>Category 2</h4>
-                    <p>14,34 EUR</p>
-                    <img src="">
-                </div>
-                <div class="category-div">
-                    <h4>Category 3</h4>
-                    <p>245,30 EUR</p>
-                    <img src="">
-                </div>
-                <div class="category-div">
-                    <h4>Category 4</h4>
-                    <p>9,30 EUR</p>
-                    <img src="">
-                </div>
+
             </div>
             <div class="tables">
                 <div class="last-transaction-table">
@@ -76,48 +62,86 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div class="add-expense-form">
-                   <form class="add-expense">
-                       <h4>Add expense</h4>
-                       <div class="input-element">
-                           <label for="expense name">Expense name: </label>
-                           <input type="text" id="expense name">
-                       </div>
-                       <div class="input-element">
-                           <label for="sum">Sum: </label>
-                           <input type="number" id="sum">
-                       </div>
-                       <div class="input-element">
-                           <label for="date">Date: </label>
-                           <input type="date" id="date">
-                       </div>
-                       <div>
-                           <label for="category1">Category 1</label>
-                           <input type="radio" id="category1">
-                           <label for="category2">Category 2</label>
-                           <input type="radio" id="category2">
-                           <label for="category3">Category 3</label>
-                           <input type="radio" id="category3">
-                           <label for="category6">Category 6</label>
-                           <input type="radio" id="category6">
-                           <label for="category7">Category 7</label>
-                           <input type="radio" id="category7">
-                           <label for="category8">Category 8</label>
-                           <input type="radio" id="category8">
-                       </div>
-                       <div>
-                           <label for="category4">Category 4</label>
-                           <input type="radio" id="category4">
-                       </div>
-                       <div>
-                           <label for="category5">Category 5</label>
-                           <input type="radio" id="category5">
-                       </div>
+                    <form class="add-expense" th:action="@{/add}" th:method="POST" th:object="${addExpenseRequest}">
+                        <h4>Add expense</h4>
+                        <div class="input-element">
+                            <label for="transactionName">Transaction name: </label>
+                            <input type="text" id="transactionName" th:field="*{transactionName}">
+                        </div>
+                        <div class="input-element">
+                            <label for="amount">Amount: </label>
+                            <input type="number" id="amount" step="0.01" th:field="*{amount}">
+                        </div>
 
-                       <button type="submit">Add</button>
-                   </form>
+
+                        <label for="category"></label>
+                        <select name="category" id="category" th:field="*{category}">
+                            <option th:each="category : ${user.categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                        </select>
+
+<!--                        <label for="transactionType"></label>-->
+<!--                        <select name="transactionType" id="transactionType" th:field="*{transactionType}">-->
+<!--                            <option th:each="type : ${T(com.spring_project.transaction.model.Type).values()}" th:value="${type}" th:text="${#strings.capitalize(#strings.toLowerCase(type))}"></option>-->
+<!--                        </select>-->
+
+
+                        <div class="input-element">
+                            <label for="date">Date: </label>
+                            <input type="date" id="date" th:field="*{transactionDate}">
+                        </div>
+
+<!--                        <div class="input-element">-->
+<!--                            <label for="description">Description: </label>-->
+<!--                            <input type="text" id="description" th:field="*{description}">-->
+<!--                        </div>-->
+
+
+
+                        <!--                       <div>-->
+                        <!--                           <select name="category1">-->
+                        <!--                               <option th:each="category1 : ${user.getCategories()}" th:value="${category1}" th:text="category1" ></option>-->
+                        <!--                           </select>-->
+                        <!--                       </div>-->
+                        <!--                               <div th:each="category1 : ${user.getCategories()}">-->
+                        <!--                                   <input type="radio" name="category1" id="category1_id" th:value="${category1.name}" th:field="*{category}" required>-->
+                        <!--                                   <label th:for="'category1-' + ${category1.id}" th:text="${category1.name}"></label>-->
+                        <!--                               </div>-->
+
+                        <button type="submit">Add</button>
+                    </form>
                 </div>
+
+
+                <!--                <div class="add-expense-form">-->
+<!--                   <form class="add-expense" th:action="@{/home}" th:method="POST" th:object="${addExpenseRequest}">-->
+<!--                       <h4>Add expense</h4>-->
+<!--                       <div class="input-element">-->
+<!--                           <label for="expense name">Expense name: </label>-->
+<!--                           <input type="text" id="expense name" th:field="*{expenseName}">-->
+<!--                       </div>-->
+<!--                       <div class="input-element">-->
+<!--                           <label for="sum">Sum: </label>-->
+<!--                           <input type="number" id="sum" step="0.01" th:field="*{expenseAmount}">-->
+<!--                       </div>-->
+<!--                       <div class="input-element">-->
+<!--                           <label for="date">Date: </label>-->
+<!--                           <input type="date" id="date" th:field="*{expenseDate}">-->
+<!--                       </div>-->
+
+<!--&lt;!&ndash;                       <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                           <select name="category1">&ndash;&gt;-->
+<!--&lt;!&ndash;                               <option th:each="category1 : ${user.getCategories()}" th:value="${category1}" th:text="category1" ></option>&ndash;&gt;-->
+<!--&lt;!&ndash;                           </select>&ndash;&gt;-->
+<!--&lt;!&ndash;                       </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                       <div th:each="category1 : ${user.getCategories()}">&ndash;&gt;-->
+<!--&lt;!&ndash;                           <input type="radio" name="category1" id="category1_id" th:value="${category1.name}" th:field="*{category}" required>&ndash;&gt;-->
+<!--&lt;!&ndash;                           <label th:for="'category1-' + ${category1.id}" th:text="${category1.name}"></label>&ndash;&gt;-->
+<!--&lt;!&ndash;                       </div>&ndash;&gt;-->
+
+<!--                       <button type="submit">Add</button>-->
+<!--                   </form>-->
+<!--                </div>-->
             </div>
         </div>
     </div>
