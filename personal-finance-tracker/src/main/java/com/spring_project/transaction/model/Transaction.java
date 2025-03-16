@@ -29,7 +29,7 @@ public class Transaction {
     private BigDecimal amount;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToOne
@@ -44,5 +44,13 @@ public class Transaction {
 
     private String description;
 
+    public Transaction(String transactionName, BigDecimal amount, User owner, Type type, LocalDate transactionDate, String description) {
+        this.transactionName = transactionName;
+        this.amount = amount;
+        this.owner = owner;
+        this.type = type;
+        this.transactionDate = transactionDate;
+        this.description = description;
+    }
 
 }

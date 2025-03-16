@@ -9,19 +9,15 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
-public class AddExpenseRequest {
+public class AddCashRequest {
 
+    @Size(min = 6, message = "At least 6 characters long")
+    private String sourceOfIncome;
 
-    @Size
-    private String transactionName;
-
-    @Positive
-    private BigDecimal amount;
+    private LocalDate date;
 
     private UUID category;
 
-    private LocalDate transactionDate;
-
-    private String description;
-
+    @Positive
+    private BigDecimal amount;
 }

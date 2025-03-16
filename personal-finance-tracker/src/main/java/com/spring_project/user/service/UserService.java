@@ -9,6 +9,7 @@ import com.spring_project.security.AuthenticationData;
 import com.spring_project.user.model.Role;
 import com.spring_project.user.model.User;
 import com.spring_project.user.repository.UserRepository;
+import com.spring_project.web.dto.AddCashRequest;
 import com.spring_project.web.dto.RegisterRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -73,11 +75,25 @@ public class UserService implements UserDetailsService {
                     .password(passwordEncoder.encode(registerRequest.getPassword()))
                     .activeProfile(true)
                     .role(Role.USER)
+                    .balance(BigDecimal.ZERO)
                     .build();
         }
 
         throw new PasswordsDoNotMatchException("Passwords do not match");
+    }
 
+    public void addCash(AddCashRequest addCashRequest,UUID userId) {
+
+        User user = getById(userId);
+        user.setBalance(user.getBalance().add(addCashRequest.getAmount()));
+        userRepository.save(user);
+    }
+
+    public void subtractCash(BigDecimal expense, UUID userId) {
+
+        User user = getById(userId);
+        user.setBalance(user.getBalance().subtract(expense));
+        userRepository.save(user);
     }
 
     public User getById(UUID id) {
@@ -87,4 +103,8 @@ public class UserService implements UserDetailsService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new DomainException("User not found"));
     }
+
+
+
+
 }

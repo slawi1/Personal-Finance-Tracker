@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <title>Add Cash</title>
+</head>
+<body>
+
+<div class="add-expense-form">
+    <form class="add-expense" th:action="@{/transactions/add/cash}" th:method="POST" th:object="${addCashRequest}">
+        <h4>Add expense</h4>
+        <div class="input-element">
+            <label for="sourceOfIncome">Source of income: </label>
+            <input type="text" id="sourceOfIncome" th:field="*{sourceOfIncome}">
+        </div>
+
+        <label for="category"></label>
+        <select name="category" id="category" th:field="*{category}">
+            <option th:each="category : ${user.categories}" th:if="${category.name.equals('Prihodi')}" th:value="${category.id}" th:text="${category.name}"></option>
+        </select>
+
+        <div class="input-element">
+            <label for="date">Date: </label>
+            <input type="date" id="date" th:field="*{date}">
+        </div>
+
+        <div class="input-element">
+            <label for="amount">Amount: </label>
+            <input type="number" id="amount" step="0.01" th:field="*{amount}">
+        </div>
+
+
+        <button type="submit">Add</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -81,8 +81,7 @@ public class HomeController {
             return new ModelAndView("/transactions-add");
         }
         User user = userService.getById(authenticationData.getId());
-        UUID categoryId = addExpenseRequest.getCategory();
-        Transaction transaction = transactionService.createExpenseTransaction(addExpenseRequest, user, categoryId);
+        Transaction transaction = transactionService.createExpenseTransaction(addExpenseRequest, user, addExpenseRequest.getCategory());
 
 
         return new ModelAndView("redirect:/home");

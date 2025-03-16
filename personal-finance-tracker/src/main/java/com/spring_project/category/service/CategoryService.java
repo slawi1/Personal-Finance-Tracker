@@ -17,13 +17,16 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
 
+
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
+
 
     }
 
     public void addDefaultCategories(User user) {
         List<Category> categories = List.of(
+                new Category("Prihodi", user, BigDecimal.valueOf(0)),
                 new Category("Shopping", user, BigDecimal.valueOf(0)),
                 new Category("Food & Drinks", user, BigDecimal.valueOf(0)),
                 new Category("Bills & Utilities", user, BigDecimal.valueOf(0)),
@@ -33,8 +36,8 @@ public class CategoryService {
     }
 
     public void addCategory(String categoryName, User user, BigDecimal amount) {
-        Category category = new Category(categoryName, user, amount);
-        categoryRepository.save(category);
+        Category newCategory = new Category(categoryName, user, amount);
+        categoryRepository.save(newCategory);
     }
 
     public  Category findCategoryById(UUID id) {
@@ -45,12 +48,35 @@ public class CategoryService {
         return categoryRepository.findCategoryByName(name).orElseThrow(()-> new DomainException("Category not found"));
     }
 
-    public void addAmount(Transaction transaction) {
+    public Category findCategoryByNameAndOwner(String categoryName, User user) {
 
-        Category category = findCategoryByName(transaction.getCategory().getName());
+        return categoryRepository.findCategoryByNameAndOwner(categoryName, user).orElseThrow(()-> new DomainException("Category not found"));
+
+    }
+
+    public void addAmount(Transaction transaction,User user) {
+
+
+        Category category = findCategoryByNameAndOwner(transaction.getCategory().getName(), user);
 
         category.setAmount(category.getAmount().add(transaction.getAmount()));
         categoryRepository.save(category);
 
     }
+
+    public void addCash(Transaction transaction) {
+        Category category = findCategoryByName(transaction.getCategory().getName());
+        category.setAmount(category.getAmount().add(transaction.getAmount()));
+        categoryRepository.save(category);
+    }
+
+//    public void addCash(User user, AddCashRequest addCashRequest) {
+//
+//        Category category = findCategoryById(userService.getCategoryId(user));
+//        category.setAmount(category.getAmount().add(addCashRequest.getAmount()));
+//        categoryRepository.save(category);
+//    }
+
+
+
 }
