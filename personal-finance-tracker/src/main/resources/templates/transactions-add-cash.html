@@ -10,10 +10,15 @@
 
 <div class="add-expense-form">
     <form class="add-expense" th:action="@{/transactions/add/cash}" th:method="POST" th:object="${addCashRequest}">
-        <h4>Add expense</h4>
+        <h4>Add cash</h4>
         <div class="input-element">
             <label for="sourceOfIncome">Source of income: </label>
             <input type="text" id="sourceOfIncome" th:field="*{sourceOfIncome}">
+        </div>
+
+        <div class="input-element">
+            <label for="description">Description: </label>
+            <input type="text" id="description" th:field="*{description}">
         </div>
 
         <label for="category"></label>
@@ -30,8 +35,6 @@
             <label for="amount">Amount: </label>
             <input type="number" id="amount" step="0.01" th:field="*{amount}">
         </div>
-
-
         <button type="submit">Add</button>
     </form>
 </div>

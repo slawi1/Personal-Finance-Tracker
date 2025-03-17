@@ -27,14 +27,14 @@
                 <a href="/home">
                     <p>Settings</p>
                 </a>
-                <a href="/">
-                    <p>Logout</p>
-                </a>
-                <a href="/add-category">
-                    <p>Add New Category</p>
+                <a href="/category/add">
+                    <p>Category Settings</p>
                 </a>
                 <a href="/transactions/add/cash">
                     <p>Add Cash</p>
+                </a>
+                <a href="/">
+                    <p>Logout</p>
                 </a>
             </nav>
         </div>
@@ -69,7 +69,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="transaction : ${user.transactions}">
+                        <tr th:each="transaction : ${transactions}">
                             <td th:text="${transaction.transactionName}">Name 1</td>
                             <td th:text="${transaction.category.name}">Category 1</td>
                             <td th:text="${transaction.amount}">50,30 EUR</td>

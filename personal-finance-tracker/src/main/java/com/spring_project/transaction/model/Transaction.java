@@ -28,11 +28,11 @@ public class Transaction {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User owner;
 
     @Enumerated(EnumType.STRING)

@@ -100,6 +100,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new DomainException("User not found"));
     }
 
+
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new DomainException("User not found"));
     }

@@ -15,37 +15,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/transactions")
 public class TransactionController {
 
     private final UserService userService;
     private final TransactionService transactionService;
-    private final CategoryService categoryService;
 
-    public TransactionController(UserService userService, TransactionService transactionService, CategoryService categoryService) {
+
+    public TransactionController(UserService userService, TransactionService transactionService) {
         this.userService = userService;
         this.transactionService = transactionService;
 
-        this.categoryService = categoryService;
     }
 
-//    @PostMapping("/new")
-//    public ModelAndView addExpense(@Valid AddExpenseRequest addExpenseRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
-//
-//        if (bindingResult.hasErrors()) {
-//            return new ModelAndView( "/home");
-//        }
-//
-//        User user = userService.findByUsername(authenticationData.getUsername());
-//        Transaction transaction = transactionService.createExpenseTransaction(addExpenseRequest, user);
-//        ModelAndView modelAndView = new ModelAndView("/home");
-//        modelAndView.addObject("user", user);
-//        return new ModelAndView("redirect:/home");
-//
-//    }
 
-    /// //////
+    @GetMapping
+    public ModelAndView showTransactions(@AuthenticationPrincipal AuthenticationData authenticationData) {
+
+        User user = userService.getById(authenticationData.getId());
+        List<Transaction> sorted = user.getTransactions().stream().sorted(Comparator.comparing(Transaction::getTransactionDate).reversed()).toList();
+        ModelAndView modelAndView = new ModelAndView("transactions");
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("transactions", sorted);
+        return modelAndView;
+
+    }
+
     @GetMapping("/add/cash")
     public ModelAndView addCashPage(@AuthenticationPrincipal AuthenticationData authenticationData) {
 

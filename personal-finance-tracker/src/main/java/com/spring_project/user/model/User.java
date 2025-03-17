@@ -54,7 +54,7 @@ public class User {
 //    @OneToMany(mappedBy = "goalOwner", fetch = FetchType.EAGER)
 //    private List<SavingsGoal> goals = new ArrayList<>();
 //
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER,cascade = CascadeType.ALL)

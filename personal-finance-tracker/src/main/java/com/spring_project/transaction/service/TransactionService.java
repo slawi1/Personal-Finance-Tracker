@@ -8,7 +8,6 @@ import com.spring_project.user.model.User;
 import com.spring_project.user.service.UserService;
 import com.spring_project.web.dto.AddCashRequest;
 import com.spring_project.web.dto.AddExpenseRequest;
-import com.spring_project.web.dto.AddTransactionRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +40,7 @@ public class TransactionService {
                 .owner(user)
                 .type(Type.EXPENSE)
                 .transactionDate(addExpenseRequest.getTransactionDate())
-                .description("")
+                .description(addExpenseRequest.getDescription())
                 .build();
 
         transactionRepository.save(transaction);
@@ -59,7 +58,7 @@ public class TransactionService {
                 .category(categoryService.findCategoryById(category))
                 .type(Type.INCOME)
                 .transactionDate(addCashRequest.getDate())
-                .description("")
+                .description(addCashRequest.getDescription())
                 .build();
 
         transactionRepository.save(transaction);
@@ -67,21 +66,6 @@ public class TransactionService {
         categoryService.addAmount(transaction, user);
         return transaction;
 
-    }
-
-    public Transaction createTransaction(AddTransactionRequest addTransactionRequest, User user, UUID categoryId) {
-
-        Transaction transaction = Transaction.builder()
-                .transactionName(addTransactionRequest.getTransactionName())
-                .amount(addTransactionRequest.getAmount())
-                .category(categoryService.findCategoryById(categoryId))
-                .owner(user)
-                .type(addTransactionRequest.getTransactionType())
-                .transactionDate(addTransactionRequest.getTransactionDate())
-                .description(addTransactionRequest.getDescription())
-                .build();
-
-        return transactionRepository.save(transaction);
     }
 
 }

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -68,9 +70,11 @@ public class HomeController {
     public ModelAndView getHomePage(@AuthenticationPrincipal AuthenticationData authenticationData) {
 
         User user = userService.getById(authenticationData.getId());
+        List<Transaction> sorted = user.getTransactions().stream().sorted(Comparator.comparing(Transaction::getTransactionDate).reversed()).limit(5).toList();
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
         modelAndView.addObject("addExpenseRequest", new AddExpenseRequest());
+        modelAndView.addObject("transactions", sorted);
         return modelAndView;
     }
 

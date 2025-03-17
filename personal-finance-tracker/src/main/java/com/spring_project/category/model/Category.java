@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,10 +25,8 @@ public class Category {
 
     private BigDecimal amount;
 
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Transaction> transactions;
-
-//    private UUID transactionId;
 
 
     @ManyToOne

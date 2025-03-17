@@ -9,13 +9,14 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Controller
+@RequestMapping("/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -26,15 +27,18 @@ public class CategoryController {
         this.userService = userService;
     }
 
-    @GetMapping("/add-category")
-    public ModelAndView addCategory() {
+    @GetMapping("/add")
+    public ModelAndView addCategory(@AuthenticationPrincipal AuthenticationData authenticationData) {
 
+        User user = userService.getById(authenticationData.getId());
         ModelAndView modelAndView = new ModelAndView("add-category");
         modelAndView.addObject("addCategoryName", new AddCategoryRequest());
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("categories", user.getCategories());
 
         return modelAndView;
     }
-    @PostMapping("/add-category")
+    @PostMapping("/add")
     public ModelAndView addNewCategory(@Valid AddCategoryRequest addCategoryRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
 
 
@@ -42,9 +46,19 @@ public class CategoryController {
             return new ModelAndView("add-category");
         }
 
-        User user = userService.findByUsername(authenticationData.getUsername());
+        User user = userService.getById(authenticationData.getId());
         categoryService.addCategory(addCategoryRequest.getCategoryName(), user, BigDecimal.valueOf(0));
 
         return new ModelAndView("redirect:/home");
+    }
+
+    @DeleteMapping("/delete")
+    public String deleteCategory(@RequestParam("categoryId") UUID categoryId ,@AuthenticationPrincipal AuthenticationData authenticationData) {
+
+        User user = userService.getById(authenticationData.getId());
+
+        categoryService.deleteCategoryByIdAndOwnerId(categoryId, user.getId());
+
+        return "redirect:/home";
     }
 }
