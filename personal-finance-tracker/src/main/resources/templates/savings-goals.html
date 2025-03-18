@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <title>Savings Goals</title>
+</head>
+<body>
+
+
+    <div th:each="goal : ${user.goals}" >
+        <h4 th:text="${goal.goalName}"></h4>
+        <p th:text="${goal.currentAmount}"></p>
+        <p th:text="${goal.targetAmount}"></p>
+        <p th:text="${goal.deadline}"></p>
+        <p th:text="${goal.status}"></p>
+
+    </div>
+
+    <a href="/savings/new">Add New Goal</a>
+
+    <div class="add-expense-form">
+        <form class="add-expense" th:action="@{/savings/add/cash}" th:method="POST" th:object="${addCashToGoalRequest}">
+            <h4>Add cash to goal</h4>
+            <div class="input-element">
+                <label for="amount">Amount: </label>
+                <input type="number" id="amount" step="0.01" th:field="*{amount}">
+            </div>
+
+            <label for="goal1"></label>
+            <select name="goal1" id="goal1" th:field="*{goalId}">
+                <option value="" disabled="disabled">Select Goal</option>
+                <option th:each="goal1 : ${user.goals}" th:value="${goal1.id}" th:text="${goal1.goalName}"></option>
+            </select>
+
+            <button type="submit">Add</button>
+        </form>
+    </div>
+
+
+</body>
+</html>

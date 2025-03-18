@@ -7,10 +7,12 @@ import com.spring_project.transaction.repository.TransactionRepository;
 import com.spring_project.user.model.User;
 import com.spring_project.user.service.UserService;
 import com.spring_project.web.dto.AddCashRequest;
+import com.spring_project.web.dto.AddCashToGoalRequest;
 import com.spring_project.web.dto.AddExpenseRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 
@@ -66,6 +68,22 @@ public class TransactionService {
         categoryService.addAmount(transaction, user);
         return transaction;
 
+    }
+
+    public void createTransactionForGoals(AddCashToGoalRequest addCashToGoalRequest, User user) {
+
+        Transaction transaction = Transaction.builder()
+                .transactionName("To goals")
+                .amount(addCashToGoalRequest.getAmount())
+                .owner(user)
+                .category(categoryService.findCategoryByNameAndOwner("Goals", user))
+                .type(Type.EXPENSE)
+                .transactionDate(LocalDate.now())
+                .description("Adding cash to goal")
+                .build();
+
+        transactionRepository.save(transaction);
+        categoryService.addAmount(transaction, user);
     }
 
 }

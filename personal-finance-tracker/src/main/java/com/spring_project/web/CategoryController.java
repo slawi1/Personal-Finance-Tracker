@@ -9,11 +9,12 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/category")
@@ -38,6 +39,7 @@ public class CategoryController {
 
         return modelAndView;
     }
+
     @PostMapping("/add")
     public ModelAndView addNewCategory(@Valid AddCategoryRequest addCategoryRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
 
@@ -50,15 +52,5 @@ public class CategoryController {
         categoryService.addCategory(addCategoryRequest.getCategoryName(), user, BigDecimal.valueOf(0));
 
         return new ModelAndView("redirect:/home");
-    }
-
-    @DeleteMapping("/delete")
-    public String deleteCategory(@RequestParam("categoryId") UUID categoryId ,@AuthenticationPrincipal AuthenticationData authenticationData) {
-
-        User user = userService.getById(authenticationData.getId());
-
-        categoryService.deleteCategoryByIdAndOwnerId(categoryId, user.getId());
-
-        return "redirect:/home";
     }
 }

@@ -29,10 +29,11 @@ public class Transaction {
     private BigDecimal amount;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id",nullable = false)
     private Category category;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id",nullable = false)
     private User owner;
 
     @Enumerated(EnumType.STRING)
@@ -44,7 +45,7 @@ public class Transaction {
 
     private String description;
 
-    public Transaction(String transactionName, BigDecimal amount, User owner, Type type, LocalDate transactionDate, String description) {
+    public Transaction(String transactionName, BigDecimal amount, Type type, LocalDate transactionDate, String description) {
         this.transactionName = transactionName;
         this.amount = amount;
         this.owner = owner;

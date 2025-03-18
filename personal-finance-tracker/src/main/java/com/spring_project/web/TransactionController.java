@@ -1,6 +1,5 @@
 package com.spring_project.web;
 
-import com.spring_project.category.service.CategoryService;
 import com.spring_project.security.AuthenticationData;
 import com.spring_project.transaction.model.Transaction;
 import com.spring_project.transaction.service.TransactionService;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/transactions")
@@ -66,28 +64,10 @@ public class TransactionController {
         }
         User user = userService.getById(authenticationData.getId());
 
-
-        Transaction transaction = transactionService.addCashTransaction(addCashRequest, user, addCashRequest.getCategory());
-
+        transactionService.addCashTransaction(addCashRequest, user, addCashRequest.getCategory());
 
         return new ModelAndView("redirect:/home");
 
     }
-
-
-    /// /////
-//    @PostMapping("/add")
-//    public String addNewTransaction2(@ModelAttribute("addTransactionRequest") AddTransactionRequest addTransactionRequest,
-//                                     @AuthenticationPrincipal AuthenticationData authenticationData, Model model) {
-//
-//        User user = userService.getById(authenticationData.getId());
-//        model.addAttribute("user", user);
-//        Transaction transaction = transactionService.createTransaction(addTransactionRequest,user);
-//
-//
-//        return "redirect:/home";
-//
-//    }
-
 
 }

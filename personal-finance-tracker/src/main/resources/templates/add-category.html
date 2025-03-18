@@ -22,20 +22,6 @@
     </form>
 </div>
 
-<div class="add-category-form">
-    <form class="form" th:action="@{/category/delete}" th:method="DELETE">
-        <input type="hidden" name="_method" value="DELETE" />
 
-        <h3>Delete Category</h3>
-
-        <label for="categoryId"></label><select name="categoryId" id="categoryId">
-            <option th:each="category : ${user.categories}" th:if="${category.name != 'Prihodi'}" th:value="${category.id}" th:text="${category.name}"></option>
-        </select>
-
-        <div class="add-category-button">
-            <button type="submit">Delete</button>
-        </div>
-    </form>
-</div>
 </body>
 </html>

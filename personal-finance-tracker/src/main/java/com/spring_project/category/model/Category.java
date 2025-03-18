@@ -25,18 +25,20 @@ public class Category {
 
     private BigDecimal amount;
 
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
+    private boolean systemCategories;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id",nullable = false)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
-    public Category(String name, User owner,BigDecimal amount) {
+    public Category(String name, User owner,BigDecimal amount, boolean systemCategories) {
         this.name = name;
         this.owner = owner;
         this.amount = amount;
+        this.systemCategories = systemCategories;
 
     }
 

@@ -23,7 +23,7 @@
 
         <label for="category"></label>
         <select name="category" id="category" th:field="*{category}">
-            <option th:each="category : ${user.categories}" th:if="${category.name.equals('Prihodi')}" th:value="${category.id}" th:text="${category.name}"></option>
+            <option th:each="category : ${user.categories}" th:if="${category.name.equals('Income')}" th:value="${category.id}" th:text="${category.name}"></option>
         </select>
 
         <div class="input-element">

@@ -10,6 +10,7 @@ import com.spring_project.user.model.Role;
 import com.spring_project.user.model.User;
 import com.spring_project.user.repository.UserRepository;
 import com.spring_project.web.dto.AddCashRequest;
+import com.spring_project.web.dto.EditProfileRequest;
 import com.spring_project.web.dto.RegisterRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +83,8 @@ public class UserService implements UserDetailsService {
         throw new PasswordsDoNotMatchException("Passwords do not match");
     }
 
+
+
     public void addCash(AddCashRequest addCashRequest,UUID userId) {
 
         User user = getById(userId);
@@ -101,8 +104,16 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new DomainException("User not found"));
+
+    public void editProfile(UUID id, EditProfileRequest editProfileRequest) {
+
+        User user = getById(id);
+
+        user.setFirstName(editProfileRequest.getFirstName());
+        user.setLastName(editProfileRequest.getLastName());
+        user.setProfilePicture(editProfileRequest.getProfilePicture());
+
+        userRepository.save(user);
     }
 
 

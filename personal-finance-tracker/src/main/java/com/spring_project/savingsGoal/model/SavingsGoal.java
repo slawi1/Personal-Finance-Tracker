@@ -23,6 +23,7 @@ public class SavingsGoal {
     private String goalName;
 
     @ManyToOne
+    @JoinColumn(name = "goalOwner_id",nullable = false)
     private User goalOwner;
 
     private BigDecimal targetAmount;
@@ -31,6 +32,7 @@ public class SavingsGoal {
 
     private LocalDate deadline;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 }

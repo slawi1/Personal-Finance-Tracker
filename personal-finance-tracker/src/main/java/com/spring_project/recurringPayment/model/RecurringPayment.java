@@ -21,11 +21,10 @@ public class RecurringPayment {
     private UUID id;
 
     @ManyToOne
+    @JoinColumn(name = "owner_id",nullable = false)
     private User owner;
 
     private BigDecimal amount;
-
-    private UUID categoryId;
 
     private LocalDate paymentDate;
 

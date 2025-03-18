@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
 
     List<Transaction> findAllByCategoryId(UUID categoryId);
+
+    void removeTransactionByCategory_Id(UUID categoryId);
 }

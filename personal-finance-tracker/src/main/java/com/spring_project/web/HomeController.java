@@ -6,7 +6,6 @@ import com.spring_project.transaction.service.TransactionService;
 import com.spring_project.user.model.User;
 import com.spring_project.user.service.UserService;
 import com.spring_project.web.dto.AddExpenseRequest;
-import com.spring_project.web.dto.AddTransactionRequest;
 import com.spring_project.web.dto.LoginRequest;
 import com.spring_project.web.dto.RegisterRequest;
 import jakarta.validation.Valid;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class HomeController {
@@ -85,7 +83,7 @@ public class HomeController {
             return new ModelAndView("/transactions-add");
         }
         User user = userService.getById(authenticationData.getId());
-        Transaction transaction = transactionService.createExpenseTransaction(addExpenseRequest, user, addExpenseRequest.getCategory());
+        transactionService.createExpenseTransaction(addExpenseRequest, user, addExpenseRequest.getCategory());
 
 
         return new ModelAndView("redirect:/home");

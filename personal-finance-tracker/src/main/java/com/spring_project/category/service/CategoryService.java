@@ -5,11 +5,8 @@ import com.spring_project.category.repository.CategoryRepository;
 import com.spring_project.exception.CategoryAlreadyExistsException;
 import com.spring_project.exception.DomainException;
 import com.spring_project.exception.MaximumCategoriesReachedException;
-import com.spring_project.recurringPayment.service.RecurringPaymentService;
 import com.spring_project.transaction.model.Transaction;
-import com.spring_project.transaction.service.TransactionService;
 import com.spring_project.user.model.User;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,29 +21,25 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
 
-
-
-
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-
 
     }
 
     public void addDefaultCategories(User user) {
         List<Category> categories = List.of(
-                new Category("Prihodi", user, BigDecimal.valueOf(0)),
-                new Category("Shopping", user, BigDecimal.valueOf(0)),
-                new Category("Food & Drinks", user, BigDecimal.valueOf(0)),
-                new Category("Bills & Utilities", user, BigDecimal.valueOf(0)),
-                new Category("Other", user, BigDecimal.valueOf(0))
+                new Category("Income", user, BigDecimal.valueOf(0),true),
+                new Category("Shopping", user, BigDecimal.valueOf(0), false),
+                new Category("Food & Drinks", user, BigDecimal.valueOf(0), false),
+                new Category("Bills & Utilities", user, BigDecimal.valueOf(0), false),
+                new Category("Goals", user, BigDecimal.valueOf(0), true)
         );
         categoryRepository.saveAll(categories);
     }
 
     public void addCategory(String categoryName, User user, BigDecimal amount) {
 
-        if (haveMoreThanTenCategories(user)) {
+        if (reachedMaximumCategories(user)) {
             throw new MaximumCategoriesReachedException("Maximum number of categories reached");
         }
         if (categoryRepository.findCategoryByNameAndOwner(categoryName, user).isPresent()) {
@@ -56,34 +49,28 @@ public class CategoryService {
                 .name(categoryName)
                 .owner(user)
                 .amount(amount)
+                .systemCategories(false)
                 .build();
         categoryRepository.save(newCategory);
     }
 
-    public  Category findCategoryById(UUID id) {
-        return categoryRepository.findById(id).orElseThrow(()-> new DomainException("Category not found"));
-    }
-
-    public Category findCategoryByName(String name) {
-        return categoryRepository.findCategoryByName(name).orElseThrow(()-> new DomainException("Category not found"));
+    public Category findCategoryById(UUID id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new DomainException("Category not found"));
     }
 
     public Category findCategoryByNameAndOwner(String categoryName, User user) {
 
-        return categoryRepository.findCategoryByNameAndOwner(categoryName, user).orElseThrow(()-> new DomainException("Category not found"));
+        return categoryRepository.findCategoryByNameAndOwner(categoryName, user).orElseThrow(() -> new DomainException("Category not found"));
 
     }
 
-    public Boolean haveMoreThanTenCategories(User user) {
+    public Boolean reachedMaximumCategories(User user) {
         List<Category> userCategories = categoryRepository.findAllByOwner(user);
-        if (userCategories.size() > 10) {
-            return true;
-        }
-        return false;
+        return userCategories.size() >= 15;
     }
 
 
-    public void addAmount(Transaction transaction,User user) {
+    public void addAmount(Transaction transaction, User user) {
 
         Category category = findCategoryByNameAndOwner(transaction.getCategory().getName(), user);
 
@@ -91,27 +78,5 @@ public class CategoryService {
         categoryRepository.save(category);
 
     }
-
-    @Transactional
-    public void deleteCategoryByIdAndOwnerId(UUID categoryId, UUID userId) {
-
-        try {
-            categoryRepository.deleteById(categoryId);
-
-            categoryRepository.flush();
-        } catch (Exception e) {
-            log.error("Error while deleting category" + e.getMessage(),e);
-            throw e;
-        }
-
-
-    }
-
-    public void addCash(Transaction transaction) {
-        Category category = findCategoryByName(transaction.getCategory().getName());
-        category.setAmount(category.getAmount().add(transaction.getAmount()));
-        categoryRepository.save(category);
-    }
-
 
 }
