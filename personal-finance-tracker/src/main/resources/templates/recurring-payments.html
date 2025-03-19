@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <title>Recurring Payments</title>
+</head>
+<body>
+
+<div class="add-expense-form">
+    <form class="add-expense" th:action="@{/recurring/payment/add}" th:method="POST" th:object="${recurringPaymentRequest}">
+        <h4>Add Recurring Payment</h4>
+        <div class="input-element">
+            <label for="paymentName">Name: </label>
+            <input type="text" id="paymentName" th:field="*{paymentName}">
+        </div>
+
+        <div class="input-element">
+            <label for="amount">Amount: </label>
+            <input type="number" id="amount" step="0.01" th:field="*{amount}">
+        </div>
+
+        <div class="input-element">
+            <label for="paymentDate">Pay Date: </label>
+            <input type="date" id="paymentDate" th:field="*{paymentDate}">
+        </div>
+        <div class="input-element">
+            <label for="categoryId">Category: </label>
+            <select name="categoryId" id="categoryId" th:field="*{categoryId}">
+                <option th:each="category : ${user.categories}" th:if="${category.systemCategories != true}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+        </div>
+        <div class="input-element">
+            <label for="frequency">Frequency: </label>
+            <select name="frequency" id="frequency" th:field="*{frequency}">
+                <option th:each="option : ${T(com.spring_project.recurringPayment.model.Frequency).values()}" th:value="${option}" th:text="${#strings.capitalize(#strings.toLowerCase(option))}"></option>
+            </select>
+        </div>
+        <div class="input-element">
+            <label for="description">Description: </label>
+            <input type="text" id="description" th:field="*{description}">
+        </div>
+        <button type="submit">Add Recurring Payment</button>
+    </form>
+</div>
+
+</body>
+</html>

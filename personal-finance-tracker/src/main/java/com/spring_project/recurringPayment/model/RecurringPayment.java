@@ -20,11 +20,17 @@ public class RecurringPayment {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "owner_id",nullable = false)
     private User owner;
 
     private BigDecimal amount;
+
+    private UUID categoryId;
+
+    private LocalDate createDate;
 
     private LocalDate paymentDate;
 
@@ -32,6 +38,9 @@ public class RecurringPayment {
     private Frequency frequency;
 
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 
 }

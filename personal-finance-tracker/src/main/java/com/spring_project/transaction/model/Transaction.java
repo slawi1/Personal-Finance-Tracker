@@ -32,7 +32,7 @@ public class Transaction {
     @JoinColumn(name = "category_id",nullable = false)
     private Category category;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "owner_id",nullable = false)
     private User owner;
 

@@ -48,13 +48,13 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<RecurringPayment> recurringPayment = new ArrayList<>();
 
     @OneToMany(mappedBy = "goalOwner", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<SavingsGoal> goals = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER,orphanRemoval = true)
     private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER,cascade = CascadeType.ALL)

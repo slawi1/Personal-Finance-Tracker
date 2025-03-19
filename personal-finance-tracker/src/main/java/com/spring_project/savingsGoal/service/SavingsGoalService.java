@@ -50,6 +50,9 @@ public class SavingsGoalService {
 
             SavingsGoal savingsGoal = goal.get();
             savingsGoal.setCurrentAmount(savingsGoal.getCurrentAmount().add(addCashToGoalRequest.getAmount()));
+            if (savingsGoal.getCurrentAmount().equals(savingsGoal.getTargetAmount())) {
+                savingsGoal.setStatus(Status.COMPLETED);
+            }
             savingsGoalRepository.save(savingsGoal);
         }
 

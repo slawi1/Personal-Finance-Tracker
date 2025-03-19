@@ -68,7 +68,7 @@ public class HomeController {
     public ModelAndView getHomePage(@AuthenticationPrincipal AuthenticationData authenticationData) {
 
         User user = userService.getById(authenticationData.getId());
-        List<Transaction> sorted = user.getTransactions().stream().sorted(Comparator.comparing(Transaction::getTransactionDate).reversed()).limit(5).toList();
+        List<Transaction> sorted = user.getTransactions().stream().sorted(Comparator.comparing(Transaction::getTransactionDate).reversed()).limit(10).toList();
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
         modelAndView.addObject("addExpenseRequest", new AddExpenseRequest());
