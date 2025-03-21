@@ -1,6 +1,7 @@
 package com.spring_project.transaction.service;
 
 import com.spring_project.category.service.CategoryService;
+import com.spring_project.notification.service.NotificationService;
 import com.spring_project.recurringPayment.model.RecurringPayment;
 import com.spring_project.transaction.model.Transaction;
 import com.spring_project.transaction.model.Type;
@@ -23,13 +24,15 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final CategoryService categoryService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
 
 
-    public TransactionService(TransactionRepository transactionRepository, CategoryService categoryService, UserService userService) {
+    public TransactionService(TransactionRepository transactionRepository, CategoryService categoryService, UserService userService, NotificationService notificationService) {
         this.transactionRepository = transactionRepository;
         this.categoryService = categoryService;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
 
@@ -88,22 +91,6 @@ public class TransactionService {
         categoryService.addAmount(transaction, user);
     }
 
-//    @Transactional
-//    public void createTransactionForRecurrings(RecurringPaymentRequest recurringPaymentRequest, User user) {
-//
-//        Transaction transaction = Transaction.builder()
-//                .transactionName(recurringPaymentRequest.getPaymentName())
-//                .amount(recurringPaymentRequest.getAmount())
-//                .owner(user)
-//                .category(categoryService.findCategoryById(recurringPaymentRequest.getCategoryId()))
-//                .type(Type.EXPENSE)
-//                .transactionDate(recurringPaymentRequest.getPaymentDate())
-//                .description(recurringPaymentRequest.getDescription())
-//                .build();
-//        transactionRepository.save(transaction);
-//        userService.subtractCash(recurringPaymentRequest.getAmount(), user.getId());
-//        categoryService.addAmount(transaction, user);
-//    }
 
     @Transactional
     public void createTransactionForRecurringPayments(RecurringPayment payment) {
@@ -120,6 +107,9 @@ public class TransactionService {
         transactionRepository.save(transaction);
         userService.subtractCash(payment.getAmount(), payment.getOwner().getId());
         categoryService.addAmount(transaction, payment.getOwner());
+
+        String body = "You have been charged for $ " + payment.getAmount() + "automatically for " + payment.getName();
+        notificationService.sendEmail(payment.getOwner().getId(), "Recurring payment", body);
     }
 
 }

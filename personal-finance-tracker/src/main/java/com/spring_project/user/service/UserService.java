@@ -5,6 +5,7 @@ import com.spring_project.exception.DomainException;
 import com.spring_project.exception.EmailAlreadyRegisteredException;
 import com.spring_project.exception.PasswordsDoNotMatchException;
 import com.spring_project.exception.UsernameAlreadyExistException;
+import com.spring_project.notification.service.NotificationService;
 import com.spring_project.security.AuthenticationData;
 import com.spring_project.user.model.Role;
 import com.spring_project.user.model.User;
@@ -31,12 +32,14 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CategoryService categoryService;
+    private final NotificationService notificationService;
 
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CategoryService categoryService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CategoryService categoryService, NotificationService notificationService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.categoryService = categoryService;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -63,6 +66,7 @@ public class UserService implements UserDetailsService {
 
         categoryService.addDefaultCategories(user);
 
+        notificationService.savePreference(user.getId(), true, user.getEmail());
 
         log.info("User with id '%s' created successfully.".formatted(user.getId()));
     }

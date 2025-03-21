@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <title>Notifications</title>
+</head>
+<body>
+
+
+<div class="details-section-container">
+    <strong>Notification type: </strong>
+    <p th:text="${notificationPreference.type}"></p>
+</div>
+<div class="details-section-container">
+    <strong>Source: </strong>
+    <p th:text="${notificationPreference.contactInfo}"></p>
+</div>
+<div class="details-section-container">
+    <strong>Notification state: </strong>
+    <p class="enabled-notification-status" th:if="${notificationPreference.enabled}">ENABLED</p>
+    <p class="disabled-notification-status" th:unless="${notificationPreference.enabled}">DISABLED</p>
+</div>
+<div class="add-category-form">
+    <form th:action="@{'/notifications?enabled=false'}" th:method="PUT" th:if="${notificationPreference.enabled}"}>
+        <button>Disable Notifications</button>
+    </form>
+    <form th:action="@{'/notifications?enabled=true'}" th:method="PUT" th:unless="${notificationPreference.enabled}"}>
+        <button>Enable Notifications</button>
+    </form>
+</div>
+
+
+</body>
+</html>
