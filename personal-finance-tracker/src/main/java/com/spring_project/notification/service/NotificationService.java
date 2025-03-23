@@ -36,7 +36,7 @@ public class NotificationService {
     }
 
 
-    public NotificationPreference getNotificatinPreference(UUID userId) {
+    public NotificationPreference getNotificationPreference(UUID userId) {
 
         ResponseEntity<NotificationPreference> response = notificationClient.getUserPreference(userId);
 

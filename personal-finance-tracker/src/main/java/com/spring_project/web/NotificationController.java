@@ -28,7 +28,7 @@ public class NotificationController {
 
         User user = userService.getById(authenticationData.getId());
 
-        NotificationPreference notificationPreference = notificationService.getNotificatinPreference(user.getId());
+        NotificationPreference notificationPreference = notificationService.getNotificationPreference(user.getId());
 
         ModelAndView modelAndView = new ModelAndView("notifications");
         modelAndView.addObject("user", user);
