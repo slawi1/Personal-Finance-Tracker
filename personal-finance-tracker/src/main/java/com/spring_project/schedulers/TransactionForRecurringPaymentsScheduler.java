@@ -24,22 +24,21 @@ public class TransactionForRecurringPaymentsScheduler {
 
     }
 
-    @Scheduled(cron = "0,30 * * * * *")
-    public void createTransactionForRecurringPayment() {
-
-        List<RecurringPayment> payments = recurringPaymentService.getAllRecurringPaymentsReadyToPay();
-        if (payments.isEmpty()) {
-            log.info("No recurring payments found");
-
-        }
-        for (RecurringPayment payment : payments) {
-
-
-            transactionService.createTransactionForRecurringPayments(payment);
-            recurringPaymentService.updateNextPayDate(payment);
-        }
-
-
-    }
+//    @Scheduled(cron = "0,30 * * * * *")
+//    public void createTransactionForRecurringPayment() {
+//
+//        List<RecurringPayment> payments = recurringPaymentService.getAllRecurringPaymentsReadyToPay();
+//        if (payments.isEmpty()) {
+//            log.info("No recurring payments found");
+//
+//        }
+//        for (RecurringPayment payment : payments) {
+//
+//
+//            transactionService.createTransactionForRecurringPayments(payment);
+//            recurringPaymentService.updateNextPayDate(payment);
+//        }
+//
+//    }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,11 +29,11 @@ public class CategoryService {
 
     public void addDefaultCategories(User user) {
         List<Category> categories = List.of(
-                new Category("Income", user, BigDecimal.valueOf(0),true),
-                new Category("Shopping", user, BigDecimal.valueOf(0), false),
-                new Category("Food & Drinks", user, BigDecimal.valueOf(0), false),
-                new Category("Bills & Utilities", user, BigDecimal.valueOf(0), false),
-                new Category("Goals", user, BigDecimal.valueOf(0), true)
+                new Category("Income", user, BigDecimal.valueOf(0),true, false),
+                new Category("Shopping", user, BigDecimal.valueOf(0), false, false),
+                new Category("Food & Drinks", user, BigDecimal.valueOf(0), false, false),
+                new Category("Bills & Utilities", user, BigDecimal.valueOf(0), false, false),
+                new Category("Goals", user, BigDecimal.valueOf(0), true, false)
         );
         categoryRepository.saveAll(categories);
     }
@@ -65,7 +66,7 @@ public class CategoryService {
     }
 
     public Boolean reachedMaximumCategories(User user) {
-        List<Category> userCategories = categoryRepository.findAllByOwner(user);
+        List<Category> userCategories = categoryRepository.findCategoriesByOwnerAndDeleted(user, false);
         return userCategories.size() >= 15;
     }
 
@@ -77,6 +78,16 @@ public class CategoryService {
         category.setAmount(category.getAmount().add(transaction.getAmount()));
         categoryRepository.save(category);
 
+    }
+
+    public void deleteCategory(UUID categoryId) {
+
+        Optional<Category> category = categoryRepository.findCategoryById(categoryId);
+        if (category.isPresent()) {
+            Category categoryToDelete = category.get();
+            categoryToDelete.setDeleted(true);
+            categoryRepository.save(categoryToDelete);
+        }
     }
 
 }

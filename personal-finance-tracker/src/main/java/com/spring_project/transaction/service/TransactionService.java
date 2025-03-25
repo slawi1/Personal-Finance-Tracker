@@ -108,7 +108,7 @@ public class TransactionService {
         userService.subtractCash(payment.getAmount(), payment.getOwner().getId());
         categoryService.addAmount(transaction, payment.getOwner());
 
-        String body = "You have been charged for $ " + payment.getAmount() + "automatically for " + payment.getName();
+        String body = "You have been automatically charged $ " + payment.getAmount() + " for " +  payment.getName();
         notificationService.sendEmail(payment.getOwner().getId(), "Recurring payment", body);
     }
 

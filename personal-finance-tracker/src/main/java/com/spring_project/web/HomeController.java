@@ -1,5 +1,6 @@
 package com.spring_project.web;
 
+import com.spring_project.category.service.CategoryService;
 import com.spring_project.security.AuthenticationData;
 import com.spring_project.transaction.model.Transaction;
 import com.spring_project.transaction.service.TransactionService;
@@ -12,23 +13,28 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class HomeController {
 
     private final UserService userService;
     private final TransactionService transactionService;
+    private final CategoryService categoryService;
 
 
-    public HomeController(UserService userService, TransactionService transactionService) {
+    public HomeController(UserService userService, TransactionService transactionService, CategoryService categoryService) {
         this.userService = userService;
         this.transactionService = transactionService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/")
@@ -90,6 +96,12 @@ public class HomeController {
 
     }
 
+    @DeleteMapping("/home/{id}")
+    public String deleteCategory(@PathVariable UUID id, @AuthenticationPrincipal AuthenticationData authenticationData) {
+        categoryService.deleteCategory(id);
+        return "redirect:/home";
+
+    }
 
 }
 

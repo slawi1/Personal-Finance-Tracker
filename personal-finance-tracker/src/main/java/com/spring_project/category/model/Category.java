@@ -30,15 +30,18 @@ public class Category {
 
     private boolean systemCategories;
 
+    private boolean deleted;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    public Category(String name, User owner,BigDecimal amount, boolean systemCategories) {
+    public Category(String name, User owner,BigDecimal amount, boolean systemCategories, boolean deleted) {
         this.name = name;
         this.owner = owner;
         this.amount = amount;
         this.systemCategories = systemCategories;
+        this.deleted = deleted;
 
     }
 

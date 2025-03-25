@@ -22,6 +22,17 @@
     </form>
 </div>
 
+<div>
+<h3>Deleted Categories</h3>
+<div th:each="category : ${user.categories}" th:if="${category.deleted == true}">
+
+    <h4 th:text="${category.name}"></h4>
+    <p th:text="|${category.getAmount()} EUR|"></p>
+    <form th:action="@{'/home/' + ${category.id}}" th:method="PUT">
+        <button class="delete-button">Restore Deleted</button>
+    </form>
+</div>
+</div>
 
 </body>
 </html>

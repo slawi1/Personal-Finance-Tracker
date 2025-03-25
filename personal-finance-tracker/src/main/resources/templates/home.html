@@ -82,8 +82,11 @@
                 </div>
 
                 <div th:each="category : ${user.categories}" >
-                    <h4 th:if="${category.systemCategories != true}" th:text="${category.name}"></h4>
-                    <p th:if="${category.systemCategories != true}" th:text="|${category.getAmount()} EUR|"></p>
+                    <h4 th:if="${category.systemCategories != true && category.deleted == false}" th:text="${category.name}"></h4>
+                    <p th:if="${category.systemCategories != true && category.deleted == false}" th:text="|${category.getAmount()} EUR|"></p>
+                    <form th:action="@{'/home/' + ${category.id}}" th:method="DELETE" th:if="${category.systemCategories != true && category.deleted == false}">
+                        <button class="delete-button">Remove Category</button>
+                    </form>
                 </div>
 
             </div>
@@ -127,7 +130,7 @@
 
                         <label for="category"></label>
                         <select name="category" id="category" th:field="*{category}">
-                            <option th:each="category : ${user.categories}" th:if="${category.systemCategories != true}" th:value="${category.id}" th:text="${category.name}"></option>
+                            <option th:each="category : ${user.categories}" th:if="${category.systemCategories != true && category.deleted == false}" th:value="${category.id}" th:text="${category.name}"></option>
                         </select>
 
                         <div class="input-element">

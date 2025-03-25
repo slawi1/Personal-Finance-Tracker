@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> new DomainException("User not found"));
 
-     return new AuthenticationData(user.getId(),username,user.getPassword(),user.getRole(), user.getActiveProfile());
+        return new AuthenticationData(user.getId(), username, user.getPassword(), user.getRole(), user.getActiveProfile());
     }
 
     @Transactional
@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService {
 
         categoryService.addDefaultCategories(user);
 
-        notificationService.savePreference(user.getId(), true, user.getEmail());
+//        notificationService.savePreference(user.getId(), true, user.getEmail());
 
         log.info("User with id '%s' created successfully.".formatted(user.getId()));
     }
@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
     public User createUser(RegisterRequest registerRequest) {
 
         if (registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
-            return User.builder()
+            User user = User.builder()
                     .username(registerRequest.getUsername())
                     .email(registerRequest.getEmail())
                     .password(passwordEncoder.encode(registerRequest.getPassword()))
@@ -82,16 +82,23 @@ public class UserService implements UserDetailsService {
                     .role(Role.USER)
                     .balance(BigDecimal.ZERO)
                     .build();
+
+            if (userRepository.findAll().isEmpty()) {
+                user.setRole(Role.ADMIN);
+            }
+
+            return user;
         }
 
         throw new PasswordsDoNotMatchException("Passwords do not match");
     }
 
 
+    public void addCash(AddCashRequest addCashRequest, UUID userId) {
 
-    public void addCash(AddCashRequest addCashRequest,UUID userId) {
+//        User user = getById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found"));
 
-        User user = getById(userId);
         user.setBalance(user.getBalance().add(addCashRequest.getAmount()));
         userRepository.save(user);
     }
@@ -108,10 +115,10 @@ public class UserService implements UserDetailsService {
     }
 
 
-
     public void editProfile(UUID id, EditProfileRequest editProfileRequest) {
 
-        User user = getById(id);
+//        User user = getById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new DomainException("User not found"));
 
         user.setFirstName(editProfileRequest.getFirstName());
         user.setLastName(editProfileRequest.getLastName());
@@ -119,8 +126,6 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
     }
-
-
 
 
 }

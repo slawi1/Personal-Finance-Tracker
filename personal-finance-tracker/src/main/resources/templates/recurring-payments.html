@@ -28,7 +28,7 @@
         <div class="input-element">
             <label for="categoryId">Category: </label>
             <select name="categoryId" id="categoryId" th:field="*{categoryId}">
-                <option th:each="category : ${user.categories}" th:if="${category.systemCategories != true}" th:value="${category.id}" th:text="${category.name}"></option>
+                <option th:each="category : ${user.categories}" th:if="${category.systemCategories != true && category.deleted == false}" th:value="${category.id}" th:text="${category.name}"></option>
             </select>
         </div>
         <div class="input-element">
