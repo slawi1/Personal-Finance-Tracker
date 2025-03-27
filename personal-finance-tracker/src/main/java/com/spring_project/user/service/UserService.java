@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -96,9 +97,7 @@ public class UserService implements UserDetailsService {
 
     public void addCash(AddCashRequest addCashRequest, UUID userId) {
 
-//        User user = getById(userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found"));
-
+        User user = getById(userId);
         user.setBalance(user.getBalance().add(addCashRequest.getAmount()));
         userRepository.save(user);
     }
@@ -117,14 +116,16 @@ public class UserService implements UserDetailsService {
 
     public void editProfile(UUID id, EditProfileRequest editProfileRequest) {
 
-//        User user = getById(id);
-        User user = userRepository.findById(id).orElseThrow(() -> new DomainException("User not found"));
-
+        User user = getById(id);
         user.setFirstName(editProfileRequest.getFirstName());
         user.setLastName(editProfileRequest.getLastName());
         user.setProfilePicture(editProfileRequest.getProfilePicture());
 
         userRepository.save(user);
+    }
+
+    public List<User> allUsers() {
+        return userRepository.findAll();
     }
 
 

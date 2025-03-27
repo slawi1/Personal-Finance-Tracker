@@ -49,7 +49,7 @@ public class CategoryController {
         }
 
         User user = userService.getById(authenticationData.getId());
-        categoryService.addCategory(addCategoryRequest.getCategoryName(), user, BigDecimal.valueOf(0));
+        categoryService.addCategory(addCategoryRequest.getCategoryName(), user);
 
         return new ModelAndView("redirect:/home");
     }

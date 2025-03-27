@@ -18,6 +18,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
 public class User {
 
     @Id
@@ -51,13 +52,13 @@ public class User {
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<RecurringPayment> recurringPayment = new ArrayList<>();
 
-    @OneToMany(mappedBy = "goalOwner", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "goalOwner", fetch = FetchType.EAGER)
     private List<SavingsGoal> goals = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER,orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Transaction> transactions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();
 
 

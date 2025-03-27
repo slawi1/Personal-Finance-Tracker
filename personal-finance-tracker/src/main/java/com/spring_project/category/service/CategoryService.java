@@ -38,7 +38,7 @@ public class CategoryService {
         categoryRepository.saveAll(categories);
     }
 
-    public void addCategory(String categoryName, User user, BigDecimal amount) {
+    public void addCategory(String categoryName, User user) {
 
         if (reachedMaximumCategories(user)) {
             throw new MaximumCategoriesReachedException("Maximum number of categories reached");
@@ -49,7 +49,7 @@ public class CategoryService {
         Category newCategory = Category.builder()
                 .name(categoryName)
                 .owner(user)
-                .amount(amount)
+                .amount(BigDecimal.ZERO)
                 .systemCategories(false)
                 .build();
         categoryRepository.save(newCategory);

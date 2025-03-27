@@ -37,7 +37,7 @@ public class TransactionService {
 
 
     @Transactional
-    public Transaction createExpenseTransaction(AddExpenseRequest addExpenseRequest, User user, UUID category) {
+    public void createExpenseTransaction(AddExpenseRequest addExpenseRequest, User user, UUID category) {
 
         Transaction transaction = Transaction.builder()
                 .transactionName(addExpenseRequest.getTransactionName())
@@ -52,11 +52,10 @@ public class TransactionService {
         transactionRepository.save(transaction);
         userService.subtractCash(addExpenseRequest.getAmount(), user.getId());
         categoryService.addAmount(transaction, user);
-        return transaction;
     }
 
     @Transactional
-    public Transaction addCashTransaction(AddCashRequest addCashRequest,User user, UUID category) {
+    public void addCashTransaction(AddCashRequest addCashRequest,User user, UUID category) {
         Transaction transaction = Transaction.builder()
                 .transactionName(addCashRequest.getSourceOfIncome())
                 .amount(addCashRequest.getAmount())
@@ -70,7 +69,6 @@ public class TransactionService {
         transactionRepository.save(transaction);
         userService.addCash(addCashRequest, user.getId());
         categoryService.addAmount(transaction, user);
-        return transaction;
 
     }
 

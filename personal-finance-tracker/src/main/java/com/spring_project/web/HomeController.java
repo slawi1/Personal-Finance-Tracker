@@ -13,10 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Comparator;
@@ -44,10 +41,14 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLoginPage() {
+    public ModelAndView getLoginPage(@RequestParam (value = "error", required = false) String errorParam) {
 
         ModelAndView modelAndView = new ModelAndView("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
+
+        if (errorParam != null) {
+            modelAndView.addObject("error", "Incorrect username or password.");
+        }
 
         return modelAndView;
     }
@@ -86,7 +87,7 @@ public class HomeController {
     public ModelAndView addExpense(@Valid AddExpenseRequest addExpenseRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("/transactions-add");
+            return new ModelAndView("users");
         }
         User user = userService.getById(authenticationData.getId());
         transactionService.createExpenseTransaction(addExpenseRequest, user, addExpenseRequest.getCategory());

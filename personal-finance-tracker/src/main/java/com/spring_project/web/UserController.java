@@ -6,6 +6,7 @@ import com.spring_project.user.service.UserService;
 import com.spring_project.web.dto.EditProfileRequest;
 import com.spring_project.web.mapper.DtoMapper;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -49,5 +51,14 @@ public class UserController {
         userService.editProfile(id, editProfileRequest);
 
         return new ModelAndView("redirect:/home");
+    }
+
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView users() {
+        List<User> allUsers = userService.allUsers();
+        ModelAndView modelAndView = new ModelAndView("users");
+        modelAndView.addObject("users", allUsers);
+        return modelAndView;
     }
 }

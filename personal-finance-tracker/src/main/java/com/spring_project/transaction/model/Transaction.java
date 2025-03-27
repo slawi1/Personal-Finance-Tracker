@@ -48,7 +48,6 @@ public class Transaction {
     public Transaction(String transactionName, BigDecimal amount, Type type, LocalDate transactionDate, String description) {
         this.transactionName = transactionName;
         this.amount = amount;
-        this.owner = owner;
         this.type = type;
         this.transactionDate = transactionDate;
         this.description = description;

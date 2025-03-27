@@ -102,6 +102,24 @@ public class UserServiceUTest {
     }
 
     @Test
+    void givenUserAndAddExpense_thenSubtractCash_shouldUpdateUserBalance() {
+
+        UUID uuid = UUID.randomUUID();
+
+        User user = User.builder()
+                .id(uuid)
+                .balance(BigDecimal.valueOf(10))
+                .build();
+        BigDecimal expense = BigDecimal.valueOf(5);
+        when(userRepository.findById(uuid)).thenReturn(Optional.of(user));
+
+        userService.subtractCash(expense, user.getId());
+
+        assertEquals(BigDecimal.valueOf(5), user.getBalance());
+        verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
     void givenNonExistentUser_thenThrowDomainException() {
         UUID uuid = UUID.randomUUID();
 

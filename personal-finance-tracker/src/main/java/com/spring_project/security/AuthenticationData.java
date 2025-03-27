@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @Getter
 @AllArgsConstructor
-public class AuthenticationData implements UserDetails {
+public class  AuthenticationData implements UserDetails {
 
     private UUID id;
     private String username;

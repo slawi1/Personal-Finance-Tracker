@@ -48,7 +48,7 @@ public class TransactionController {
     public ModelAndView addCashPage(@AuthenticationPrincipal AuthenticationData authenticationData) {
 
         User user = userService.getById(authenticationData.getId());
-        ModelAndView modelAndView = new ModelAndView("/transactions-add-cash");
+        ModelAndView modelAndView = new ModelAndView("transactions-add-cash");
         modelAndView.addObject("user", user);
         modelAndView.addObject("addCashRequest", new AddCashRequest());
 
@@ -60,7 +60,7 @@ public class TransactionController {
     public ModelAndView addNewTransaction(AddCashRequest addCashRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("/transactions-add-cash");
+            return new ModelAndView("transactions-add-cash");
         }
         User user = userService.getById(authenticationData.getId());
 
