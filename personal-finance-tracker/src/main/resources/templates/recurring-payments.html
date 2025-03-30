@@ -34,7 +34,7 @@
         <div class="input-element">
             <label for="frequency">Frequency: </label>
             <select name="frequency" id="frequency" th:field="*{frequency}">
-                <option th:each="option : ${T(com.spring_project.recurringPayment.model.Frequency).values()}" th:value="${option}" th:text="${#strings.capitalize(#strings.toLowerCase(option))}"></option>
+                <option th:each="option : ${T(app.recurringPayment.model.Frequency).values()}" th:value="${option}" th:text="${#strings.capitalize(#strings.toLowerCase(option))}"></option>
             </select>
         </div>
         <div class="input-element">

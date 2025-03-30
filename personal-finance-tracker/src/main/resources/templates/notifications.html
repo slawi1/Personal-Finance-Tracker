@@ -23,10 +23,10 @@
     <p class="disabled-notification-status" th:unless="${notificationPreference.enabled}">DISABLED</p>
 </div>
 <div class="add-category-form">
-    <form th:action="@{'/notifications?enabled=false'}" th:method="PUT" th:if="${notificationPreference.enabled}"}>
+    <form th:action="@{'/notifications/preferences?enabled=false'}" th:method="PUT" th:if="${notificationPreference.enabled}"}>
         <button>Disable Notifications</button>
     </form>
-    <form th:action="@{'/notifications?enabled=true'}" th:method="PUT" th:unless="${notificationPreference.enabled}"}>
+    <form th:action="@{'/notifications/preferences?enabled=true'}" th:method="PUT" th:unless="${notificationPreference.enabled}"}>
         <button>Enable Notifications</button>
     </form>
 </div>

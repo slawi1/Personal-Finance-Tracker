@@ -31,7 +31,7 @@
             <label for="goal1"></label>
             <select name="goal1" id="goal1" th:field="*{goalId}">
                 <option value="" disabled="disabled">Select Goal</option>
-                <option th:each="goal1 : ${user.goals}" th:value="${goal1.id}" th:text="${goal1.goalName}"></option>
+                <option th:each="goal1 : ${user.goals}" th:value="${goal1.id}" th:text="${goal1.goalName}" th:if="${goal1.status.name() == 'ACTIVE'}"></option>
             </select>
 
             <button type="submit">Add</button>

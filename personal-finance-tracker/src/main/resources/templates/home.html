@@ -51,7 +51,7 @@
                 <a href="/home">
                     <p>Settings</p>
                 </a>
-                <a href="/edit/users">
+                <a href="/edit/users" th:if="${user.role.ADMIN}">
                     <p>All Users</p>
                 </a>
                 <a href="/notifications">

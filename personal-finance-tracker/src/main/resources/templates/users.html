@@ -18,6 +18,8 @@
             <th>Email</th>
             <th>Active Profile</th>
             <th>Role</th>
+            <th>Switch Status</th>
+            <th>Switch Role</th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +30,21 @@
             <td th:text="${user.email}"></td>
             <td th:text="${user.activeProfile}"></td>
             <td th:text="${user.role}"></td>
+            <td>
+                <form th:action="@{'/edit/users/' + ${user.getId()} + '/status'}" th:method="PUT">
+                    <button>
+                        <p>Status</p>
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/edit/users/' + ${user.getId()} + '/role'}" th:method="PUT">
+                    <button>
+                        <p>Role</p>
+                    </button>
+                </form>
+            </td>
+
         </tr>
         </tbody>
     </table>
