@@ -38,7 +38,7 @@ public class TransactionForRecurringPaymentsScheduler {
                 transactionService.createTransactionForRecurringPayments(payment);
                 recurringPaymentService.updateNextPayDate(payment);
             }catch (Exception e) {
-                log.error("");
+                log.error("An error occurred while trying to make a recurring payment for user with id [%s].".formatted(payment.getOwner().getId()));
             }
 
         }

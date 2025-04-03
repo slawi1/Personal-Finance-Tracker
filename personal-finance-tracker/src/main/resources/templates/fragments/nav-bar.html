@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+</head>
+<body class="background">
+<div th:fragment="nav-bar">
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/home">
+                <img src="/images/logo.png" alt="BudgetBuddy Logo" class="logo">
+            </a>
+        </div>
+        <div th:unless="${user}" class="navbar-right">
+            <a href="/login" class="btn">Login</a>
+            <a href="/register" class="btn">Register</a>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

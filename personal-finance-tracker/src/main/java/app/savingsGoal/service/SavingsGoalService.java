@@ -47,9 +47,6 @@ public class SavingsGoalService {
 
         SavingsGoal goal = savingsGoalRepository.findById(addCashToGoalRequest.getGoalId()).orElseThrow(() -> new GoalNotFoundException("Goal not found"));
 
-        if (goal.getStatus().equals(Status.COMPLETED)) {
-            throw new GoalNotFoundException("Goal already completed");
-        }
         goal.setCurrentAmount(goal.getCurrentAmount().add(addCashToGoalRequest.getAmount()));
 
         if (goal.getCurrentAmount().compareTo(goal.getTargetAmount()) >= 0) {

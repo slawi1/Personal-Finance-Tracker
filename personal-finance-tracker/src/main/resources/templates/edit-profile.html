@@ -3,24 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
 </head>
-<body>
-
+<body class="home-background">
+<th:block th:insert="~{fragments/nav-bar :: nav-bar}"></th:block>
 <main>
+    <th:block th:insert="~{fragments/user-details :: user-details}"></th:block>
+    <div class="main-content-edit-profile">
+        <div class="edit-form">
+            <form class="edit-user-form" th:action="@{'profile/' + ${user.id}}" th:method="PUT" th:object="${editProfileRequest}">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" placeholder="First Name" th:field="*{firstName}">
 
-    <form th:action="@{'profile/' + ${user.id}}" th:method="PUT" th:object="${editProfileRequest}">
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" placeholder="First Name" th:field="*{firstName}">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" placeholder="Last Name" th:field="*{lastName}">
 
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" placeholder="Last Name" th:field="*{lastName}">
+                <label for="profilePic">Profile Picture URL:</label>
 
-        <label for="profilePic">Profile Picture URL:</label>
-        <input type="text" id="profilePic" placeholder="URL" th:field="*{profilePicture}">
-        <button type="submit">Save</button>
-
-    </form>
+                <input type="text" id="profilePic" placeholder="URL" th:field="*{profilePicture}">
+                <div class="button-save">
+                    <button type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </main>
 
 </body>

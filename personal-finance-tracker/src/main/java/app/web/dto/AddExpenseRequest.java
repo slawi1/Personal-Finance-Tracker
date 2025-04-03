@@ -1,7 +1,6 @@
 package app.web.dto;
 
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,14 +17,17 @@ import java.util.UUID;
 public class AddExpenseRequest {
 
 
-    @Size
+    @NotBlank(message = "Transaction name cannot be blank!")
+    @Size(min = 4, max = 50, message = "Transaction name must be between 4 and 50 characters long!")
     private String transactionName;
 
-    @Positive
+    @NotNull(message = "Amount cannot be null!")
+    @Positive(message = "Amount must be positive number")
     private BigDecimal amount;
 
     private UUID category;
-
+    @NotNull(message = "Transaction date cannot be null!")
+    @PastOrPresent(message = "Transaction date cannot be in the future")
     private LocalDate transactionDate;
 
     private String description;

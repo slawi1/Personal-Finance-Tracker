@@ -9,10 +9,10 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/recurring/payment")
@@ -39,14 +39,25 @@ public class RecurringPaymentController {
     }
 
     @PostMapping("/add")
-    public String createRecurringPayment(@Valid RecurringPaymentRequest request, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
-
-        if (bindingResult.hasErrors()) {
-            return "recurring-payments";
-        }
+    public ModelAndView createRecurringPayment(@Valid RecurringPaymentRequest recurringPaymentRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
         User user = userService.getById(authenticationData.getId());
-        recurringPaymentService.createRecurringPayment(request, user);
 
+        ModelAndView modelAndView = new ModelAndView("recurring-payments");
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("recurringPaymentRequest", recurringPaymentRequest);
+            modelAndView.addObject("bindingResult", bindingResult);
+            return modelAndView;
+        }
+        recurringPaymentService.createRecurringPayment(recurringPaymentRequest, user);
+
+        return new ModelAndView("redirect:/recurring/payment");
+    }
+
+
+    @PutMapping("/{id}")
+    public String changePaymentStatus(@PathVariable UUID id, @AuthenticationPrincipal AuthenticationData authenticationData) {
+        recurringPaymentService.changeStatus(id);
         return "redirect:/recurring/payment";
     }
 }

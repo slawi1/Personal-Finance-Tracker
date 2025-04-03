@@ -29,7 +29,7 @@ public class CategoryService {
 
     public void addDefaultCategories(User user) {
         List<Category> categories = List.of(
-                new Category("Income", user, BigDecimal.valueOf(0),true, false),
+                new Category("Income", user, BigDecimal.valueOf(0), true, false),
                 new Category("Shopping", user, BigDecimal.valueOf(0), false, false),
                 new Category("Food & Drinks", user, BigDecimal.valueOf(0), false, false),
                 new Category("Bills & Utilities", user, BigDecimal.valueOf(0), false, false),
@@ -46,6 +46,7 @@ public class CategoryService {
         if (categoryRepository.findCategoryByNameAndOwner(categoryName, user).isPresent()) {
             throw new CategoryAlreadyExistsException("Category already exists");
         }
+
         Category newCategory = Category.builder()
                 .name(categoryName)
                 .owner(user)
@@ -86,6 +87,7 @@ public class CategoryService {
         if (category.isPresent()) {
             Category categoryToDelete = category.get();
             categoryToDelete.setDeleted(true);
+            categoryToDelete.setAmount(BigDecimal.ZERO);
             categoryRepository.save(categoryToDelete);
         }
     }

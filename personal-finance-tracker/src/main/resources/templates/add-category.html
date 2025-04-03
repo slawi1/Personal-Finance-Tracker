@@ -4,35 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
     <title>Login</title>
 </head>
-<body>
+<body class="home-background">
+<th:block th:insert="~{fragments/nav-bar :: nav-bar}"></th:block>
 
-<div class="add-category-form">
-    <form class="form" th:action="@{/category/add}" th:method="POST" th:object="${addCategoryName}">
+<main>
+    <th:block th:insert="~{fragments/user-details :: user-details}"></th:block>
 
-        <h3>Add new Category</h3>
+    <div class="main-content">
+        <div class="container">
+            <div class="category-form">
+                <form class="add-category-form" th:action="@{/category/add}" th:method="POST"
+                      th:object="${addCategoryName}">
 
-        <label class="label-element" for="name">Category name: </label>
-        <input type="text" id="name" name="name" th:field="*{categoryName}">
+                    <h3>Add new Category</h3>
 
-        <div class="add-category-button">
-            <button type="submit">Add</button>
+                    <label class="label-element" for="name">Category name: </label>
+                    <input type="text" id="name" name="name" th:field="*{categoryName}" required>
+                    <div th:if="${bindingResult?.hasFieldErrors('categoryName')}" class="error">
+                        <p th:each="error : ${bindingResult.getFieldErrors('categoryName')}"
+                           th:text="${error.defaultMessage}"></p>
+                    </div>
+                    <p class="alert-warning" th:text="${categoryErrorMessage}"></p>
+                    <div class="add-category-button">
+                        <button type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="deleted-categories-container">
+                <div class="deleted-categories">
+                    <h3>Deleted Categories:</h3>
+                </div>
+                <div class="all-deleted">
+                    <div class="deleted-category" th:each="category : ${user.categories}"
+                         th:if="${category.deleted == true}">
+
+                        <h4 th:text="${category.name}"></h4>
+                        <p th:text="|${category.getAmount()} EUR|"></p>
+                        <form class="restore-deleted-form" th:action="@{'/category/' + ${category.id}}" th:method="PUT">
+
+                            <div class="add-category-button">
+                                <button class="delete-button">Restore Deleted</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>
-</div>
-
-<div>
-<h3>Deleted Categories</h3>
-<div th:each="category : ${user.categories}" th:if="${category.deleted == true}">
-
-    <h4 th:text="${category.name}"></h4>
-    <p th:text="|${category.getAmount()} EUR|"></p>
-    <form th:action="@{'/home/' + ${category.id}}" th:method="PUT">
-        <button class="delete-button">Restore Deleted</button>
-    </form>
-</div>
-</div>
-
+    </div>
+</main>
 </body>
 </html>

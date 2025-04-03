@@ -2,33 +2,64 @@
     margin: 0;
     padding: 0;
 }
+html {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
 
-html, body {
-    background-color: red;
-    height: 100%;
-    width: auto;
+}
+.background {
+    height: 100vh;
+    color: aliceblue;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+.content, .login-form, .register-form{
+    height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
-
 }
 
-.login-form, .register-form {
-    display: block;
-    height: 40%;
-    padding: 3em;
-    border: 2px solid black;
-    background-color: green;
-
+.app-title {
+    font-family: Poppins, sans-serif;
+    font-size: 6em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: snow;
+    text-shadow: 0.1em 0.1em 0.9em rgba(0, 0, 0, 0.6);
+    opacity: 0.8;
+    backdrop-filter: blur(3px);
 }
 
-input, .input-element{
+.navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
     display: flex;
-
-    padding: 0.2em;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.3em;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(5px);
 }
 
-h3, .login-button, .register-button{
-    display: flex;
-    justify-content: center;
+.logo {
+    height: 3em;
+    width: auto;
 }
+
+.navbar-right .btn {
+    font-family: 'Poppins', sans-serif;
+    margin-left: 1.2em;
+    padding: 0.7em 3em;
+    color: snow;
+    text-decoration: none;
+    background: #2f4f4f;
+    border-radius: 10px;
+
+}
+
+.navbar-right .btn:hover {
+    background: #4682b4;
+}
+

@@ -61,11 +61,11 @@ public class UserService implements UserDetailsService {
 
         Optional<User> optionalUsername = userRepository.findByUsername((registerRequest.getUsername()));
         if (optionalUsername.isPresent()) {
-            throw new UsernameAlreadyExistException("Username '%s' is already taken".formatted(registerRequest.getUsername()));
+            throw new UsernameAlreadyExistException("Username '%s' is already taken!".formatted(registerRequest.getUsername()));
         }
         Optional<User> optionalEmail = userRepository.findByEmail((registerRequest.getEmail()));
         if (optionalEmail.isPresent()) {
-            throw new EmailAlreadyRegisteredException("Email '%s' is already registered".formatted(registerRequest.getEmail()));
+            throw new EmailAlreadyRegisteredException("Email '%s' is already registered!".formatted(registerRequest.getEmail()));
         }
 
         User user = userRepository.save(createUser(registerRequest));
@@ -74,10 +74,11 @@ public class UserService implements UserDetailsService {
 
         UserRegisteredEvent event = UserRegisteredEvent.builder()
                 .id(user.getId())
+                .username(user.getUsername())
                 .registeredAt(LocalDateTime.now())
                 .build();
         userRegisteredEventProducer.send(event);
-//        notificationService.savePreference(user.getId(), true, user.getEmail());
+        notificationService.savePreference(user.getId(), true, user.getEmail());
 
         log.info("User with id '%s' created successfully.".formatted(user.getId()));
     }
@@ -101,7 +102,7 @@ public class UserService implements UserDetailsService {
             return user;
         }
 
-        throw new PasswordsDoNotMatchException("Passwords do not match");
+        throw new PasswordsDoNotMatchException("Passwords do not match!");
     }
 
 

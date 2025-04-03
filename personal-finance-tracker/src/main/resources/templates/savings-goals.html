@@ -4,40 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
     <title>Savings Goals</title>
 </head>
-<body>
+<body class="home-background">
+<th:block th:insert="~{fragments/nav-bar :: nav-bar}"></th:block>
 
+<main>
+    <th:block th:insert="~{fragments/user-details :: user-details}"></th:block>
 
-    <div th:each="goal : ${user.goals}" >
-        <h4 th:text="${goal.goalName}"></h4>
-        <p th:text="${goal.currentAmount}"></p>
-        <p th:text="${goal.targetAmount}"></p>
-        <p th:text="${goal.deadline}"></p>
-        <p th:text="${goal.status}"></p>
+    <div class="main-content">
+        <div class="goals-page-container">
 
-    </div>
+            <div class="add-goal-button">
+                <a class="add-goal" href="/savings/new">Add New Goal</a>
+            </div>
+            <div class="goals-container1">
+                <h4>All Goals</h4>
 
-    <a href="/savings/new">Add New Goal</a>
-
-    <div class="add-expense-form">
-        <form class="add-expense" th:action="@{/savings/add/cash}" th:method="POST" th:object="${addCashToGoalRequest}">
-            <h4>Add cash to goal</h4>
-            <div class="input-element">
-                <label for="amount">Amount: </label>
-                <input type="number" id="amount" step="0.01" th:field="*{amount}">
+                <div class="goals-container">
+                    <div class="goal" th:each="goal : ${user.goals}">
+                        <p>Name: </p>
+                        <p th:text="${goal.goalName}"></p>
+                        <p>Current amount: </p>
+                        <p th:text="${goal.currentAmount}"></p>
+                        <p>Target amount: </p>
+                        <p th:text="${goal.targetAmount}"></p>
+                        <p>Deadline: </p>
+                        <p th:text="${goal.deadline}"></p>
+                        <p>Status: </p>
+                        <p th:text="${goal.status}"></p>
+                    </div>
+                </div>
             </div>
 
-            <label for="goal1"></label>
-            <select name="goal1" id="goal1" th:field="*{goalId}">
-                <option value="" disabled="disabled">Select Goal</option>
-                <option th:each="goal1 : ${user.goals}" th:value="${goal1.id}" th:text="${goal1.goalName}" th:if="${goal1.status.name() == 'ACTIVE'}"></option>
-            </select>
 
-            <button type="submit">Add</button>
-        </form>
+            <div class="add-cash-to-goal-form">
+                <form class="add-expense1" th:action="@{/savings/add/cash}" th:method="POST"
+                      th:object="${addCashToGoalRequest}">
+                    <h4>Add cash to goal</h4>
+                        <label for="amount">Amount: </label>
+                        <input type="number" id="amount" step="0.01" th:field="*{amount}">
+                        <div th:if="${bindingResult?.hasFieldErrors('amount')}" class="error">
+                            <p th:each="error : ${bindingResult.getFieldErrors('amount')}"
+                               th:text="${error.defaultMessage}"></p>
+                        </div>
+                    <label for="goal1"></label>
+                    <select name="goal1" id="goal1" th:field="*{goalId}">
+                        <option value="" disabled="disabled">Select Goal</option>
+                        <option th:each="goal1 : ${user.goals}" th:value="${goal1.id}" th:text="${goal1.goalName}"
+                                th:if="${goal1.status.name() == 'ACTIVE'}"></option>
+                    </select>
+
+                    <button class="add-cash-to-goal-button" type="submit">Add</button>
+                </form>
+            </div>
+        </div>
     </div>
-
-
+</main>
 </body>
 </html>

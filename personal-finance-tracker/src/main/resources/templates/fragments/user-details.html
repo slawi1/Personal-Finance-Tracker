@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--    <link rel="stylesheet" type="text/css" href="/css/index.css">-->
+<!--    <link rel="stylesheet" type="text/css" href="/css/home.css">-->
+</head>
+<body class="background">
+<div th:fragment="user-details" class="nav-bar">
+    <div class="user-details">
+        <div class="profile-header">
+            <img th:src="${#strings.isEmpty(user.profilePicture) ? 'https://cdn0.iconfinder.com/data/icons/cryptocurrency-137/128/1_profile_user_avatar_account_person-132-256.png' : user.profilePicture}"
+                 alt="Profile Picture" class="profile-img">
+            <h2 class="profile-name"
+                th:text="${(!#strings.isEmpty(user.firstName) || (!#strings.isEmpty(user.lastName))) ? user.firstName + ' ' + user.lastName : 'First and Last'}"></h2>
+        </div>
+        <div class="profile-info">
+            <div class="details-section-container">
+                <strong>Username: </strong>
+                <p class="user" th:text="${user.username}"></p>
+            </div>
+            <div class="details-section-container">
+                <strong>Email: </strong>
+                <p class="user" th:text="${user.email}"></p>
+            </div>
+
+        </div>
+    </div>
+    <nav class="navigation">
+        <a href="/edit/profile">
+            <p class="links">Edit profile</p>
+        </a>
+        <a href="/notifications">
+            <p class="links">Notification Settings</p>
+        </a>
+        <a th:href="@{/category/add}">
+            <p class="links">Category Settings</p>
+        </a>
+        <a href="/transactions/add/cash">
+            <p class="links">Add Cash</p>
+        </a>
+        <a href="/transactions">
+            <p class="links">Transactions</p>
+        </a>
+        <a href="/savings">
+            <p class="links">Saving Goals</p>
+        </a>
+        <a href="/recurring/payment">
+            <p class="links">Recurring Payments</p>
+        </a>
+        <a href="/edit/users" th:if="${user.role.name() == 'ADMIN'}">
+            <p class="links">All Users</p>
+        </a>
+        <a href="/">
+            <p class="links-logout">Logout</p>
+        </a>
+    </nav>
+</div>
+</body>
+</html>
+

@@ -13,6 +13,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static app.TestBuilder.getUser;
@@ -64,10 +65,10 @@ public class HomeControllerApiTest {
     void postRequestToRegister_happyPath() throws Exception {
 
         MockHttpServletRequestBuilder request = post("/register")
-                .formField("username", "user")
+                .formField("username", "username")
                 .formField("email", "user@abv.bg")
-                .formField("password", "1234")
-                .formField("ConfirmPassword", "1234")
+                .formField("password", "12345678")
+                .formField("ConfirmPassword", "12345678")
                 .with(csrf());
 
         mockMvc.perform(request)
@@ -139,5 +140,51 @@ public class HomeControllerApiTest {
                 .andExpect(model().attributeExists("addExpenseRequest"))
                 .andExpect(model().attributeExists("transactions"));
         verify(userService, times(1)).getById(userId);
+    }
+
+    @Test
+    void postRequestToAddExpense_happyPath() throws Exception {
+
+        UUID userId = UUID.randomUUID();
+        when(userService.getById(any())).thenReturn(getUser());
+
+        AuthenticationData principal = new AuthenticationData(userId, "user123", "1234", Role.USER, true);
+        MockHttpServletRequestBuilder request = post("/add")
+                .formField("transactionName", "Test transaction")
+                .formField("amount", "100")
+                .formField("transactionDate", LocalDate.now().toString())
+                .with(user(principal))
+                .with(csrf());
+
+        mockMvc.perform(request)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/home"));
+
+        verify(transactionService, times(1)).createExpenseTransaction(any(), any(), any());
+    }
+
+    @Test
+    void postRequestToAddExpenseWithInvalidData_shouldReturnModelAndView() throws Exception {
+
+        UUID userId = UUID.randomUUID();
+        when(userService.getById(any())).thenReturn(getUser());
+
+        AuthenticationData principal = new AuthenticationData(userId, "user123", "1234", Role.USER, true);
+        MockHttpServletRequestBuilder request = post("/add")
+                .formField("transactionName", "Te")
+                .formField("amount", "-100")
+                .formField("transactionDate", LocalDate.now().toString())
+                .with(user(principal))
+                .with(csrf());
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(view().name("home"))
+                .andExpect(model().attributeExists("addExpenseRequest"))
+                .andExpect(model().attributeExists("transactions"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("bindingResult"));
+
+        verify(transactionService, never()).createExpenseTransaction(any(), any(), any());
     }
 }

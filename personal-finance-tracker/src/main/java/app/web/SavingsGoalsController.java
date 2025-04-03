@@ -37,29 +37,42 @@ public class SavingsGoalsController {
         return modelAndView;
     }
     @GetMapping("/new")
-    private ModelAndView addNewGoals() {
+    private ModelAndView addNewGoals(@AuthenticationPrincipal AuthenticationData authenticationData) {
+        User user = userService.getById(authenticationData.getId());
         ModelAndView modelAndView = new ModelAndView("add-new-goal");
+        modelAndView.addObject("user", user);
         modelAndView.addObject("createNewGoal", new CreateNewGoalRequest());
         return modelAndView;
     }
 
     @PostMapping("/new")
-    public String createNewGoal(@Valid CreateNewGoalRequest request, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
-
-        if (bindingResult.hasErrors()) {
-            return "add-new-goal";
-        }
+    public ModelAndView createNewGoal(@Valid CreateNewGoalRequest request, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
         User user = userService.getById(authenticationData.getId());
+        ModelAndView modelAndView = new ModelAndView("add-new-goal");
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("createNewGoal", request);
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("bindingResult", bindingResult);
+            return modelAndView;
+        }
+
         savingsGoalService.createNewGoal(request, user);
-        return "redirect:/savings";
+        return new ModelAndView("redirect:/savings");
     }
 
 
     @PostMapping("/add/cash")
-    public ModelAndView addCash(@Valid AddCashToGoalRequest request, @AuthenticationPrincipal AuthenticationData authenticationData) {
-
+    public ModelAndView addCash(@Valid AddCashToGoalRequest request, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
 
         User user = userService.getById(authenticationData.getId());
+        ModelAndView modelAndView = new ModelAndView("savings-goals");
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("addCashToGoalRequest", request);
+            modelAndView.addObject("bindingResult", bindingResult);
+            return modelAndView;
+        }
+
         savingsGoalService.addCashToGoal(request, user);
 
         return new ModelAndView("redirect:/savings");

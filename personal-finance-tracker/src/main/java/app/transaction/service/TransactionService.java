@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -46,6 +47,7 @@ public class TransactionService {
                 .owner(user)
                 .type(Type.EXPENSE)
                 .transactionDate(addExpenseRequest.getTransactionDate())
+                .transactionCreationDate(LocalDateTime.now())
                 .description(addExpenseRequest.getDescription())
                 .build();
 
@@ -65,6 +67,7 @@ public class TransactionService {
                 .category(categoryService.findCategoryById(category))
                 .type(Type.INCOME)
                 .transactionDate(addCashRequest.getDate())
+                .transactionCreationDate(LocalDateTime.now())
                 .description(addCashRequest.getDescription())
                 .build();
 
@@ -84,6 +87,7 @@ public class TransactionService {
                 .category(categoryService.findCategoryByNameAndOwner("Goals", user))
                 .type(Type.EXPENSE)
                 .transactionDate(LocalDate.now())
+                .transactionCreationDate(LocalDateTime.now())
                 .description("Adding cash to goal")
                 .build();
 
@@ -101,6 +105,7 @@ public class TransactionService {
                 .owner(payment.getOwner())
                 .type(Type.EXPENSE)
                 .transactionDate(payment.getPaymentDate())
+                .transactionCreationDate(LocalDateTime.now())
                 .description("Automatic payment for " + payment.getName())
                 .build();
 

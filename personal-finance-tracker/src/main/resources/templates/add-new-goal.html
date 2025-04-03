@@ -4,30 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
     <title>Add New Goal</title>
 </head>
-<body>
+<body class="home-background">
+<th:block th:insert="~{fragments/nav-bar :: nav-bar}"></th:block>
+<main>
+    <th:block th:insert="~{fragments/user-details :: user-details}"></th:block>
 
-<div class="add-expense-form">
-    <form class="add-expense" th:action="@{/savings/new}" th:method="POST" th:object="${createNewGoal}">
-        <h4>Add cash</h4>
-        <div class="input-element">
-            <label for="goalName">Goal name: </label>
-            <input type="text" id="goalName" th:field="*{goalName}">
+    <div class="main-content">
+        <div class="container">
+            <div class="category-form">
+                <form class="add-category-form" th:action="@{/savings/new}" th:method="POST"
+                      th:object="${createNewGoal}">
+                    <h4>Add goal</h4>
+                    <label for="goalName">Goal name: </label>
+                    <input type="text" id="goalName" th:field="*{goalName}">
+                    <p class="alert-warning" th:if="${#fields.hasErrors('goalName')}" th:errors="*{goalName}"></p>
+                    <div th:if="${bindingResult?.hasFieldErrors('goalName')}" class="error">
+                        <p th:each="error : ${bindingResult.getFieldErrors('goalName')}"
+                           th:text="${error.defaultMessage}"></p>
+                    </div>
+                    <label for="targetAmount">Target Amount: </label>
+                    <input type="number" id="targetAmount" step="0.01" th:field="*{targetAmount}">
+                    <div th:if="${bindingResult?.hasFieldErrors('targetAmount')}" class="error">
+                        <p th:each="error : ${bindingResult.getFieldErrors('targetAmount')}"
+                           th:text="${error.defaultMessage}"></p>
+                    </div>
+
+                    <label for="deadline">Deadline: </label>
+                    <input type="date" id="deadline" th:field="*{deadline}">
+                    <div th:if="${bindingResult?.hasFieldErrors('deadline')}" class="error">
+                        <p th:each="error : ${bindingResult.getFieldErrors('deadline')}"
+                           th:text="${error.defaultMessage}"></p>
+                    </div>
+
+                    <div class="add-category-button">
+                        <button type="submit">Add New Goal</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="input-element">
-            <label for="targetAmount">Target Amount: </label>
-            <input type="number" id="targetAmount" step="0.01" th:field="*{targetAmount}">
-        </div>
-
-        <div class="input-element">
-            <label for="deadline">Deadline: </label>
-            <input type="date" id="deadline" th:field="*{deadline}">
-        </div>
-        <button type="submit">Add New Goal</button>
-    </form>
-</div>
-
+    </div>
+</main>
 </body>
 </html>

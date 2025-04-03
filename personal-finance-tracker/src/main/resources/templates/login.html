@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
     <title>Login</title>
 </head>
-    <body>
+<th:block th:insert="~{fragments/nav-bar :: nav-bar}"></th:block>
 
+<body class="background">
     <div class="login-form">
         <form class="form" th:action="@{/login}" th:method="POST">
 
@@ -18,12 +20,13 @@
 
                 <label class="label-element" for="password">Password: </label>
                 <input type="password" id="password" name="password" placeholder="Your password">
+            <p class="alert-warning" th:if="${error}" th:text="${error}"></p>
 
-            <div class="login-button">
-               <button type="submit">Log in</button>
-                <p>Do not have an account? <a href="/register">Register</a></p>
-
+            <div class="button">
+               <button type="submit">Login</button>
             </div>
+            <p class="already">Do not have an account? <a href="/register">Register</a></p>
+
         </form>
     </div>
     </body>

@@ -1,8 +1,7 @@
 package app.web.dto;
 
 import app.user.model.User;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,13 +16,17 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CreateNewGoalRequest {
 
-    @NotBlank
+    @NotBlank(message = "Goal name cannot be blank!")
+    @Size(min = 4, message = "Goal name must be at least 4 characters long!")
     private String goalName;
 
     private User owner;
 
-    @Positive
+    @NotNull(message = "Amount cannot be null!")
+    @Positive(message = "Only positive numbers allowed!")
     private BigDecimal targetAmount;
 
+    @FutureOrPresent(message = "Deadline cannot be in the past!")
+    @NotNull(message = "Deadline cannot be null!")
     private LocalDate deadline;
 }

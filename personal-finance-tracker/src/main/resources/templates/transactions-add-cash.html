@@ -4,40 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
     <title>Add Cash</title>
 </head>
-<body>
+<body class="home-background">
+<th:block th:insert="~{fragments/nav-bar :: nav-bar}"></th:block>
 
-<div class="add-expense-form">
-    <form class="add-expense" th:action="@{/transactions/add/cash}" th:method="POST" th:object="${addCashRequest}">
-        <h4>Add cash</h4>
-        <div class="input-element">
-            <label for="sourceOfIncome">Source of income: </label>
-            <input type="text" id="sourceOfIncome" th:field="*{sourceOfIncome}">
+<main>
+    <th:block th:insert="~{fragments/user-details :: user-details}"></th:block>
+    <div class="main-content">
+        <div class="add-cash-container">
+            <div class="add-expense-form">
+                <form class="add-expense" th:action="@{/transactions/add/cash}" th:method="POST"
+                      th:object="${addCashRequest}">
+                    <h4>Add cash</h4>
+                    <label for="sourceOfIncome">Source of income: </label>
+                    <input type="text" id="sourceOfIncome" th:field="*{sourceOfIncome}">
+                    <div th:if="${bindingResult?.hasFieldErrors('sourceOfIncome')}" class="error">
+                        <p th:each="error : ${bindingResult.getFieldErrors('sourceOfIncome')}"
+                           th:text="${error.defaultMessage}"></p>
+                    </div>
+                    <label for="description">Description: </label>
+                    <input type="text" id="description" th:field="*{description}">
+                    <label for="category"></label>
+                    <select name="category" id="category" th:field="*{category}">
+                        <option th:each="category : ${user.categories}" th:if="${category.name.equals('Income')}"
+                                th:value="${category.id}" th:text="${category.name}"></option>
+                    </select>
+
+                    <label for="date">Date: </label>
+                    <input type="date" id="date" th:field="*{date}">
+                    <div th:if="${bindingResult?.hasFieldErrors('date')}" class="error">
+                        <p th:each="error : ${bindingResult.getFieldErrors('date')}"
+                           th:text="${error.defaultMessage}"></p>
+                    </div>
+                    <label for="amount">Amount: </label>
+                    <input type="number" id="amount" step="0.01" th:field="*{amount}">
+                    <div th:if="${bindingResult?.hasFieldErrors('amount')}" class="error">
+                        <p th:each="error : ${bindingResult.getFieldErrors('amount')}"
+                           th:text="${error.defaultMessage}"></p>
+                    </div>
+                    <div class="add-cash-button">
+                        <button type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="input-element">
-            <label for="description">Description: </label>
-            <input type="text" id="description" th:field="*{description}">
-        </div>
-
-        <label for="category"></label>
-        <select name="category" id="category" th:field="*{category}">
-            <option th:each="category : ${user.categories}" th:if="${category.name.equals('Income')}" th:value="${category.id}" th:text="${category.name}"></option>
-        </select>
-
-        <div class="input-element">
-            <label for="date">Date: </label>
-            <input type="date" id="date" th:field="*{date}">
-        </div>
-
-        <div class="input-element">
-            <label for="amount">Amount: </label>
-            <input type="number" id="amount" step="0.01" th:field="*{amount}">
-        </div>
-        <button type="submit">Add</button>
-    </form>
-</div>
-
+    </div>
+</main>
 </body>
 </html>

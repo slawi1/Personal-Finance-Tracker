@@ -9,10 +9,10 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/category")
@@ -41,14 +41,29 @@ public class CategoryController {
     @PostMapping("/add")
     public ModelAndView addNewCategory(@Valid AddCategoryRequest addCategoryRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
 
-
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("add-category");
-        }
-
         User user = userService.getById(authenticationData.getId());
+        ModelAndView modelAndView = new ModelAndView("add-category");
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("bindingResult", bindingResult);
+            modelAndView.addObject("addCategoryName", addCategoryRequest);
+
+            return modelAndView;
+        }
         categoryService.addCategory(addCategoryRequest.getCategoryName(), user);
 
         return new ModelAndView("redirect:/home");
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteCategory(@PathVariable UUID id) {
+        categoryService.deleteCategory(id);
+        return "redirect:/home";
+    }
+
+    @PutMapping("/{id}")
+    public String restoreDeletedCategory(@PathVariable UUID id) {
+        categoryService.restoreDeletedCategory(id);
+        return "redirect:/category/add";
     }
 }

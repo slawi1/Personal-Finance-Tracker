@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class RecurringPaymentService {
@@ -41,6 +43,20 @@ public class RecurringPaymentService {
     public List<RecurringPayment> getAllRecurringPaymentsReadyToPay() {
 
         return recurringPaymentRepository.findAllByStatusAndPaymentDateLessThanEqual(Status.ACTIVE, LocalDate.now());
+    }
+
+    public void changeStatus(UUID id) {
+        Optional<RecurringPayment> recurringPayment = recurringPaymentRepository.findById(id);
+        if (recurringPayment.isPresent()) {
+            RecurringPayment payment = recurringPayment.get();
+            if (payment.getStatus() == Status.ACTIVE) {
+                payment.setStatus(Status.INACTIVE);
+                recurringPaymentRepository.save(payment);
+                return;
+            }
+            payment.setStatus(Status.ACTIVE);
+            recurringPaymentRepository.save(payment);
+        }
     }
 
 

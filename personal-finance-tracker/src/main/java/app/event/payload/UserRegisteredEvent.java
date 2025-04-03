@@ -15,5 +15,6 @@ import java.util.UUID;
 public class UserRegisteredEvent {
 
     private UUID id;
+    private String username;
     private LocalDateTime registeredAt;
 }

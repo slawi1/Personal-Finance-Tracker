@@ -6,6 +6,7 @@ import app.transaction.service.TransactionService;
 import app.user.model.User;
 import app.user.service.UserService;
 import app.web.dto.AddCashRequest;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -36,7 +37,7 @@ public class TransactionController {
     public ModelAndView showTransactions(@AuthenticationPrincipal AuthenticationData authenticationData) {
 
         User user = userService.getById(authenticationData.getId());
-        List<Transaction> sorted = user.getTransactions().stream().sorted(Comparator.comparing(Transaction::getTransactionDate).reversed()).toList();
+        List<Transaction> sorted = user.getTransactions().stream().sorted(Comparator.comparing(Transaction::getTransactionCreationDate).reversed()).toList();
         ModelAndView modelAndView = new ModelAndView("transactions");
         modelAndView.addObject("user", user);
         modelAndView.addObject("transactions", sorted);
@@ -57,12 +58,16 @@ public class TransactionController {
     }
 
     @PostMapping("/add/cash")
-    public ModelAndView addNewTransaction(AddCashRequest addCashRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
-
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("transactions-add-cash");
-        }
+    public ModelAndView addCashToUser(@Valid AddCashRequest addCashRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
         User user = userService.getById(authenticationData.getId());
+
+        ModelAndView modelAndView = new ModelAndView("transactions-add-cash");
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("addCashRequest", addCashRequest);
+            modelAndView.addObject("bindingResult", bindingResult);
+            return modelAndView;
+        }
 
         transactionService.addCashTransaction(addCashRequest, user, addCashRequest.getCategory());
 

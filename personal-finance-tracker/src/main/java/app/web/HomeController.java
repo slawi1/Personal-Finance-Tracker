@@ -1,6 +1,5 @@
 package app.web;
 
-import app.category.service.CategoryService;
 import app.security.AuthenticationData;
 import app.transaction.model.Transaction;
 import app.transaction.service.TransactionService;
@@ -13,25 +12,24 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class HomeController {
 
     private final UserService userService;
     private final TransactionService transactionService;
-    private final CategoryService categoryService;
 
 
-    public HomeController(UserService userService, TransactionService transactionService, CategoryService categoryService) {
+    public HomeController(UserService userService, TransactionService transactionService) {
         this.userService = userService;
         this.transactionService = transactionService;
-        this.categoryService = categoryService;
     }
 
     @GetMapping("/")
@@ -64,8 +62,11 @@ public class HomeController {
     @PostMapping("/register")
     public ModelAndView registerUser(@Valid RegisterRequest registerRequest, BindingResult bindingResult) {
 
+        ModelAndView modelAndView = new ModelAndView("register");
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("register");
+            modelAndView.addObject("bindingResult", bindingResult);
+            modelAndView.addObject("registerRequest", registerRequest);
+            return modelAndView;
         }
         userService.register(registerRequest);
         return new ModelAndView("redirect:/login");
@@ -75,7 +76,7 @@ public class HomeController {
     public ModelAndView getHomePage(@AuthenticationPrincipal AuthenticationData authenticationData) {
 
         User user = userService.getById(authenticationData.getId());
-        List<Transaction> sorted = user.getTransactions().stream().sorted(Comparator.comparing(Transaction::getTransactionDate).reversed()).limit(10).toList();
+        List<Transaction> sorted = user.getTransactions().stream().sorted(Comparator.comparing(Transaction::getTransactionCreationDate).reversed()).limit(10).toList();
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("user", user);
         modelAndView.addObject("addExpenseRequest", new AddExpenseRequest());
@@ -85,29 +86,20 @@ public class HomeController {
 
     @PostMapping("/add")
     public ModelAndView addExpense(@Valid AddExpenseRequest addExpenseRequest, BindingResult bindingResult, @AuthenticationPrincipal AuthenticationData authenticationData) {
-
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("users");
-        }
         User user = userService.getById(authenticationData.getId());
+        List<Transaction> sorted = user.getTransactions().stream().sorted(Comparator.comparing(Transaction::getTransactionCreationDate).reversed()).limit(10).toList();
+        ModelAndView modelAndView = new ModelAndView("home");
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("user", user);
+            modelAndView.addObject("bindingResult", bindingResult);
+            modelAndView.addObject("addExpenseRequest", addExpenseRequest);
+            modelAndView.addObject("transactions", sorted);
+            return modelAndView;
+        }
+
         transactionService.createExpenseTransaction(addExpenseRequest, user, addExpenseRequest.getCategory());
-
-
         return new ModelAndView("redirect:/home");
 
-    }
-
-    @DeleteMapping("/home/{id}")
-    public String deleteCategory(@PathVariable UUID id, @AuthenticationPrincipal AuthenticationData authenticationData) {
-        categoryService.deleteCategory(id);
-        return "redirect:/home";
-
-    }
-
-    @PutMapping("/home/{id}")
-    public String restoreDeletedCategory(@PathVariable UUID id, @AuthenticationPrincipal AuthenticationData authenticationData) {
-        categoryService.restoreDeletedCategory(id);
-        return "redirect:/category/add";
     }
 
 }
